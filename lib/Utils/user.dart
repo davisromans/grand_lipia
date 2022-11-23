@@ -3,51 +3,43 @@ import 'dart:convert';
 class User {
   final String id;
   final String name;
-  final String email;
+  final String phone;
   final String password;
-  final String address;
   final String type;
   final String token;
-  final List<dynamic> cart;
+  final String address;
 
-  User({
+  User( {
     required this.id,
     required this.name,
-    required this.email,
+    required this.phone,
     required this.password,
-    required this.address,
     required this.type,
     required this.token,
-    required this.cart,
+    required this.address,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'email': email,
+      'phone': phone,
       'password': password,
-      'address': address,
       'type': type,
       'token': token,
-      'cart': cart,
+      'address': address,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
       name: map['name'] ?? '',
-      email: map['email'] ?? '',
+      phone: map['phone'] ?? '',
       password: map['password'] ?? '',
-      address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
-      cart: List<Map<String, dynamic>>.from(
-        map['cart']?.map(
-          (x) => Map<String, dynamic>.from(x),
-        ),
-      ),
+      address: map['address'] ?? '',
     );
   }
 
@@ -58,22 +50,82 @@ class User {
   User copyWith({
     String? id,
     String? name,
-    String? email,
+    String? phone,
     String? password,
-    String? address,
     String? type,
     String? token,
+    String? address,
+
     List<dynamic>? cart,
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
-      email: email ?? this.email,
+      phone: phone ?? this.phone,
       password: password ?? this.password,
-      address: address ?? this.address,
       type: type ?? this.type,
       token: token ?? this.token,
-      cart: cart ?? this.cart,
+      address: token ?? this.address,
+    );
+  }
+}
+
+class updateUser {
+  final String id;
+  final String name;
+  final String phone;
+  final String password;
+  final String productPhone;
+  final List<String> images;
+
+  updateUser( {
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.password,
+    required this.images,
+    required this.productPhone,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'phone': phone,
+      'password': password,
+      'images': images,
+      'productPhone': productPhone,
+    };
+  }
+
+  factory updateUser.fromMap(Map<String, dynamic> map) {
+    return updateUser(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      phone: map['phone'] ?? '',
+      productPhone: map['productPhone'] ?? '',
+      password: map['password'] ?? '',
+      images: List<String>.from(map['images']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory updateUser.fromJson(String source) => updateUser.fromMap(json.decode(source));
+
+  updateUser copyWith({
+    String? id,
+    String? name,
+    String? phone,
+
+  }) {
+    return updateUser(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      password: password,
+      images: images,
+      productPhone: phone ?? this.productPhone,
     );
   }
 }

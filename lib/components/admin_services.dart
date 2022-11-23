@@ -1,31 +1,35 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:amazon_clone_tutorial/constants/error_handling.dart';
-import 'package:amazon_clone_tutorial/constants/global_variables.dart';
-import 'package:amazon_clone_tutorial/constants/utils.dart';
-import 'package:amazon_clone_tutorial/features/admin/models/sales.dart';
-import 'package:amazon_clone_tutorial/models/order.dart';
-import 'package:amazon_clone_tutorial/models/product.dart';
-import 'package:amazon_clone_tutorial/providers/user_provider.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-class AdminServices {
-  void sellProduct({
+import '../Utils/error_handling.dart';
+import '../Utils/order.dart';
+import '../Utils/product.dart';
+import '../Utils/user_provider.dart';
+import '../Utils/utils.dart';
+import '../screen_navigation_widget.dart';
+
+
+class sellerRequest {
+  void makeContract({
     required BuildContext context,
     required String name,
     required String description,
     required double price,
-    required double quantity,
-    required String category,
+    required String location,
+    required String buyer,
+    required String seller,
+    required String status,
+    required String dealer,
+    required String url,
     required List<File> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     try {
-      final cloudinary = CloudinaryPublic('denfgaxvg', 'uszbstnu');
+      final cloudinary = CloudinaryPublic('dorxkvvvv', 'p2ayj0bu');
       List<String> imageUrls = [];
 
       for (int i = 0; i < images.length; i++) {
@@ -38,10 +42,14 @@ class AdminServices {
       Product product = Product(
         name: name,
         description: description,
-        quantity: quantity,
+        location: location,
         images: imageUrls,
-        category: category,
+        buyer: buyer,
         price: price,
+        status: status,
+        seller: seller,
+        dealer: dealer,
+        url: url,
       );
 
       http.Response res = await http.post(
@@ -52,17 +60,21 @@ class AdminServices {
         },
         body: product.toJson(),
       );
-
       httpErrorHandle(
         response: res,
         context: context,
         onSuccess: () {
-          showSnackBar(context, 'Product Added Successfully!');
+          showSnackBar(context, 'Umefanikiwa kutengeneza mkataba');
           Navigator.pop(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
         },
       );
     } catch (e) {
       showSnackBar(context, e.toString());
+      print(e.toString());
     }
   }
 
@@ -70,9 +82,9 @@ class AdminServices {
   Future<List<Product>> fetchAllProducts(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];
+
     try {
-      http.Response res =
-          await http.get(Uri.parse('$uri/admin/get-products'), headers: {
+      http.Response res = await http.get(Uri.parse('$uri/admin/get-products'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
@@ -90,10 +102,12 @@ class AdminServices {
               ),
             );
           }
+          print( jsonDecode(res.body));
         },
       );
     } catch (e) {
       showSnackBar(context, e.toString());
+      print(e.toString());
     }
     return productList;
   }
@@ -122,6 +136,11 @@ class AdminServices {
         context: context,
         onSuccess: () {
           onSuccess();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
+          showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
         },
       );
     } catch (e) {
@@ -191,38 +210,5 @@ class AdminServices {
     }
   }
 
-  Future<Map<String, dynamic>> getEarnings(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    List<Sales> sales = [];
-    int totalEarning = 0;
-    try {
-      http.Response res =
-          await http.get(Uri.parse('$uri/admin/analytics'), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
 
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          var response = jsonDecode(res.body);
-          totalEarning = response['totalEarnings'];
-          sales = [
-            Sales('Mobiles', response['mobileEarnings']),
-            Sales('Essentials', response['essentialEarnings']),
-            Sales('Books', response['booksEarnings']),
-            Sales('Appliances', response['applianceEarnings']),
-            Sales('Fashion', response['fashionEarnings']),
-          ];
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-    return {
-      'sales': sales,
-      'totalEarnings': totalEarning,
-    };
-  }
 }

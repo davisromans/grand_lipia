@@ -1,23 +1,31 @@
 import 'dart:convert';
-
-import 'package:amazon_clone_tutorial/models/rating.dart';
+import 'dart:io';
+import 'package:test_app/Utils/rating.dart';
 
 class Product {
   final String name;
   final String description;
-  final double quantity;
+  final String location;
   final List<String> images;
-  final String category;
+  final String buyer;
+  final String seller;
   final double price;
   final String? id;
+  final String status;
+  final String dealer;
+  final String url;
   final List<Rating>? rating;
   Product({
     required this.name,
     required this.description,
-    required this.quantity,
+    required this.location,
     required this.images,
-    required this.category,
+    required this.buyer,
+    required this.seller,
     required this.price,
+    required this.status,
+    required this.dealer,
+    required this.url,
     this.id,
     this.rating,
   });
@@ -26,22 +34,30 @@ class Product {
     return {
       'name': name,
       'description': description,
-      'quantity': quantity,
+      'location': location,
       'images': images,
-      'category': category,
+      'buyer': buyer,
+      'seller': seller,
       'price': price,
       'id': id,
       'rating': rating,
+      'status': status,
+      'dealer': dealer,
+      'url': url,
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
+      status: map['status'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
-      quantity: map['quantity']?.toDouble() ?? 0.0,
+      location: map['location'] ?? '',
+      url: map['url'] ?? '',
       images: List<String>.from(map['images']),
-      category: map['category'] ?? '',
+      buyer: map['buyer'] ?? '',
+      seller: map['seller'] ?? '',
+      dealer: map['dealer'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       id: map['_id'],
       rating: map['ratings'] != null
@@ -59,3 +75,5 @@ class Product {
   factory Product.fromJson(String source) =>
       Product.fromMap(json.decode(source));
 }
+
+

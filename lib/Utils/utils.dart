@@ -1,12 +1,13 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+String uri = 'http://0.0.0.0:3000';
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(text),
+      backgroundColor: Colors.orange,
     ),
   );
 }
