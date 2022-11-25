@@ -223,7 +223,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     username =  prefs.getString('name');
     userPhone = prefs.getString('phone');
     dpUrl = prefs.getString('dp')!;
-    print('This is the dp url: '+ dpUrl);
     greeting();
   }
 
@@ -809,7 +808,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                         if(userPhone == productData.buyer || userPhone == productData.seller){
                                             checker = true;
                                         }
-                                            return checker?Padding(
+                                            return checker && userPhone == productData.buyer || userPhone == productData.seller ?Padding(
                                               padding:
                                                   EdgeInsetsDirectional.fromSTEB(10, 8, 10, 0),
                                               child: InkWell(
@@ -827,6 +826,9 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                             Seller: productData.seller,
                                                             Id: productData.id,
                                                             Dealer: productData.dealer,
+                                                            Url: productData.url,
+                                                            Status: productData.status,
+                                                            buyerImage: productData.buyerImage,
                                                           )));
                                                 },
                                                 child: Container(
@@ -875,9 +877,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                 Color(0xFFEEEEEE),
                                                             image: DecorationImage(
                                                               fit: BoxFit.cover,
-                                                              image: Image.asset(
-                                                                'assets/images/woman.jpg',
-                                                              ).image,
+                                                              image: NetworkImage(
+                                                               userPhone == productData.buyer?
+                                                               productData.url: productData.buyerImage,
+                                                              ),
                                                             ),
                                                             shape: BoxShape.circle,
                                                           ),

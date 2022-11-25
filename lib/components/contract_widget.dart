@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/error_handling.dart';
 import '../Utils/utils.dart';
@@ -34,6 +35,8 @@ class _ContractWidgetState extends State<ContractWidget>
   var sellerName;
   List infoList = [];
   bool infoSearch = false;
+  var buyerImage = '';
+  bool contractActivate = false;
   var url;
   getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -255,6 +258,7 @@ class _ContractWidgetState extends State<ContractWidget>
         status: status.toString(),
         dealer: sellerName,
         url: url,
+        buyerImage: buyerImage,
       );
     } else {
       showSnackBar(
@@ -288,7 +292,12 @@ class _ContractWidgetState extends State<ContractWidget>
         context: context,
         onSuccess: () {
           var returnData = jsonDecode(res.body);
-          showSnackBar(context, 'taarifa zipo');
+          if(returnData.length > 0){
+            contractActivate = true;
+          }else{
+            showSnackBar(context, 'Hakuna taarifa za mteja');
+          }
+
           print(returnData);
           infoList = returnData;
           setState((){
@@ -802,7 +811,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                 size: 30,
                               ),
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.orange,
+                                primary: Colors.lightGreen,
                                 onPrimary: Colors.black,
                                 textStyle: FlutterFlowTheme.of(context)
                                     .title1
@@ -821,7 +830,7 @@ class _ContractWidgetState extends State<ContractWidget>
                       ),
                     ],
                   ),
-                  infoSearch == true?Padding(
+                  infoSearch == true && infoList.length > 0?Padding(
                       padding: const EdgeInsets.only(
                           top: 0, bottom: 15, left: 0, right: 10),
                       child: Container(
@@ -834,6 +843,9 @@ class _ContractWidgetState extends State<ContractWidget>
                             physics: const NeverScrollableScrollPhysics(),
                           itemCount: 1,
                             itemBuilder: (context, index) {
+                              buyerImage = infoList[index]['images'].length > 0?
+                              infoList[index]['images'][0]:
+                              'https://www.linkpicture.com/q/dp_3.png';
                           return Column(
                             children: [
                               Padding(
@@ -964,13 +976,13 @@ class _ContractWidgetState extends State<ContractWidget>
                 padding: EdgeInsetsDirectional.fromSTEB(30, 20, 30, 10),
                 child: FFButtonWidget(
                   onPressed: () {
-                    sellProduct();
+                    contractActivate?sellProduct():Text('');
                   },
                   text: 'Create Contract',
                   options: FFButtonOptions(
                     width: double.infinity,
                     height: 45,
-                    color: FlutterFlowTheme.of(context).secondaryColor,
+                    color: contractActivate?Colors.lightGreen:CupertinoColors.systemGrey3,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Outfit',
                           color: Colors.white,

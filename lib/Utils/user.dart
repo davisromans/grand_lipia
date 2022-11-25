@@ -77,6 +77,7 @@ class updateUser {
   final String password;
   final String productPhone;
   final List<String> images;
+  final String dpUrl;
 
   updateUser( {
     required this.id,
@@ -85,6 +86,7 @@ class updateUser {
     required this.password,
     required this.images,
     required this.productPhone,
+    required this.dpUrl,
   });
 
   Map<String, dynamic> toMap() {
@@ -95,6 +97,7 @@ class updateUser {
       'password': password,
       'images': images,
       'productPhone': productPhone,
+      'dpUrl': dpUrl,
     };
   }
 
@@ -105,6 +108,7 @@ class updateUser {
       phone: map['phone'] ?? '',
       productPhone: map['productPhone'] ?? '',
       password: map['password'] ?? '',
+      dpUrl: map['dpUrl'] ?? '',
       images: List<String>.from(map['images']),
     );
   }
@@ -124,6 +128,7 @@ class updateUser {
       name: name ?? this.name,
       phone: phone ?? this.phone,
       password: password,
+      dpUrl: dpUrl,
       images: images,
       productPhone: phone ?? this.productPhone,
     );

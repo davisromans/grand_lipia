@@ -25,6 +25,7 @@ class sellerRequest {
     required String status,
     required String dealer,
     required String url,
+    required String buyerImage,
     required List<File> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -34,7 +35,7 @@ class sellerRequest {
 
       for (int i = 0; i < images.length; i++) {
         CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(images[i].path, folder: name),
+          CloudinaryFile.fromFile(images[i].path, folder: 'Products'),
         );
         imageUrls.add(res.secureUrl);
       }
@@ -50,6 +51,7 @@ class sellerRequest {
         seller: seller,
         dealer: dealer,
         url: url,
+        buyerImage: buyerImage,
       );
 
       http.Response res = await http.post(

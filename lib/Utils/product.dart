@@ -14,6 +14,7 @@ class Product {
   final String status;
   final String dealer;
   final String url;
+  final String buyerImage;
   final List<Rating>? rating;
   Product({
     required this.name,
@@ -26,6 +27,7 @@ class Product {
     required this.status,
     required this.dealer,
     required this.url,
+    required this.buyerImage,
     this.id,
     this.rating,
   });
@@ -44,12 +46,14 @@ class Product {
       'status': status,
       'dealer': dealer,
       'url': url,
+      'buyerImage': buyerImage,
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       status: map['status'] ?? '',
+      buyerImage: map['buyerImage'] ?? '',
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       location: map['location'] ?? '',

@@ -271,6 +271,7 @@ class _ProfileWidgetState extends State<ProfileWidget> with TickerProviderStateM
           name: usernameField.text != ''?
           usernameField.text:username,
           images: imageUrls != []?imageUrls:imageUrls,
+          dpUrl: dpUrl,
         );
       http.Response res = await http.post(
         Uri.parse('$uri/api/update_profile'),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_platform_alert/flutter_platform_alert.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/Utils/product.dart';
@@ -26,6 +26,9 @@ class ContractInfoWidget extends StatefulWidget {
       this.Seller,
         this.Dealer,
         this.Id,
+        this.Url,
+        this.Status,
+        this.buyerImage,
       this.Buyer})
       : super(
           key: key,
@@ -39,6 +42,9 @@ class ContractInfoWidget extends StatefulWidget {
   final Seller;
   final Id;
   final Dealer;
+  final Url;
+  final buyerImage;
+  final Status;
 
   @override
   _ContractInfoWidgetState createState() => _ContractInfoWidgetState();
@@ -58,6 +64,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   final sellerRequest adminServices = sellerRequest();
   var id;
   var sellerName;
+  var dpBuyer;
+  var dpSeller;
+  var status;
   fetchAllProducts() async {
     products = await adminServices.fetchAllProducts(context);
     setState(() {});
@@ -242,6 +251,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     ),
   };
 
+
   Future<void> deleteProduct() async {
     try {
       http.Response res = await http.post(
@@ -263,6 +273,35 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
               MaterialPageRoute(
                   builder: (context) => NavigationScreen()));
           showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> activeContract() async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/admin/activate-contract'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'id': id,
+          'status': 'Requested',
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
+          showSnackBar(context, 'Mkataba umekubaliwa');
         },
       );
     } catch (e) {
@@ -304,6 +343,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       images = widget.Image;
       id = widget.Id;
       sellerName = widget.Dealer;
+      dpBuyer = widget.Url;
+      dpSeller = widget.buyerImage;
+      status = widget.Status;
     });
     fetchAllProducts();
   }
@@ -388,9 +430,10 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                             color: Color(0xFFEEEEEE),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: Image.asset(
-                                'assets/images/dp.webp',
-                              ).image,
+                              image: NetworkImage(
+                                isSeller?
+                                dpBuyer: dpSeller,
+                              ),
                             ),
                             shape: BoxShape.circle,
                           ),
@@ -435,18 +478,18 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                               itemCount: 5,
                                               itemSize: 20,
                                               glow: true,
-                                              glowColor: Color(0xFFFF5E01),
+                                              glowColor: Colors.white,
                                               glowRadius: 2,
                                               ratingWidget: RatingWidget(
                                                   full: const Icon(Icons.star,
-                                                      color: Color(0xFFFF5E01)),
+                                                      color:  Colors.lightGreen),
                                                   half: const Icon(
                                                     Icons.star_half,
-                                                    color: Color(0xFFFF5E01),
+                                                    color:  Colors.lightGreen,
                                                   ),
                                                   empty: const Icon(
                                                     Icons.star_outline,
-                                                    color: Color(0xFFFF5E01),
+                                                    color:  Colors.lightGreen,
                                                   )),
                                               onRatingUpdate: (value) {
                                                 setState(() {
@@ -669,7 +712,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
                           child: Text(
                             'Delivery Details (Location)',
                             textAlign: TextAlign.start,
@@ -852,19 +895,22 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListView.builder(
+                            itemCount: 1,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return ElevatedButton(
-                                  onPressed: () {
-
+                                  onPressed: () async {
+                                    status == 'Requested'?activeContract():
+                                   rateUser();
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Text(
-                                      'Kubali',
+                                      status == 'Requested'?'Kubali':"Kamilisha",
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.orange,
+                                    primary: Colors.lightGreen,
                                     onPrimary: Colors.black,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
@@ -899,6 +945,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListView.builder(
+                              itemCount: 1,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return ElevatedButton(
                                   onPressed: () {
@@ -911,7 +959,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.orange,
+                                    primary:  Colors.lightGreen,
                                     onPrimary: Colors.black,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
@@ -938,5 +986,100 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         ),
       ),
     );
+  }
+
+  rateUser() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            title: Text(
+              'Please rate us!!!',
+              style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: 'Ubuntu',
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            content:  Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional
+                              .fromSTEB(15, 4, 0, 0),
+                          child: RatingBar(
+                              initialRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 35,
+                              ignoreGestures: false,
+                              updateOnDrag: true,
+                              glow: true,
+                              glowColor:
+                              Colors.lightGreen,
+                              glowRadius: 2,
+                              ratingWidget:
+                              RatingWidget(
+                                  full: const Icon(
+                                      Icons.star,
+                                      color: Colors.lightGreen),
+                                  half: const Icon(
+                                    Icons.star_half,
+                                    color:  Colors.lightGreen
+                                  ),
+                                  empty: const Icon(
+                                    Icons
+                                        .star_outline,
+                                    color:  Colors.lightGreen
+                                  )),
+                              onRatingUpdate: (value) {
+                                setState(() {
+                                  _ratingValue = value;
+                                });
+                              }),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional
+                              .fromSTEB(6, 6, 0, 0),
+                          child: Text(
+                            _ratingValue != null
+                                ? _ratingValue
+                                .toString() +
+                                ' of 5.0'
+                                : 'No rating yet!',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                      height: MediaQuery.of(context).size.height * 0.12,
+                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('ok'),
+                        ),
+                      )
+                  )]
+            ),
+          );});
+        });
   }
 }
