@@ -210,6 +210,35 @@ class _TerminateWidgetState extends State<TerminateWidget>
   Widget build(BuildContext context) {
     return new Scaffold(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      appBar: AppBar(
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        leading: new IconButton(
+          icon: new Icon(
+            Icons.arrow_back_ios_outlined,
+            color: Colors.white,
+            size: 20,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleSpacing: -10,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+          child: Text(
+            'Sitisha mkataba',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+              fontFamily: 'Outfit',
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        toolbarHeight: 42,
+      ),
       body: SafeArea(
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -217,81 +246,18 @@ class _TerminateWidgetState extends State<TerminateWidget>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 15, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios_rounded,
-                              color: FlutterFlowTheme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                          ),
-                           SizedBox(width: 10,),
-                           Text(
-                            'Terminate Contract',
-                            textAlign: TextAlign.start,
-                            style: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                              fontFamily: 'Outfit',
-                              color:
-                              FlutterFlowTheme.of(context).primaryColor,
-                              fontSize: 22,
-                            ),
-                          )
-                            ],
-                          ),
-                    ).animated(
-                        [animationsMap['textOnPageLoadAnimation1']!]),
-                        ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(15, 15, 0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                           child: Text(
-                            'Termination Details',
+                            'Sababu ya kusitishwa',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -319,7 +285,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                       autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'Please tell us the reason of terminating the contract',
+                        hintText: 'Tafadhali jaza sababu ya kusitishwa kwa mkataba huu',
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -360,7 +326,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Proof(If any) ',
+                            'Ushahidi (kama upo)',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -399,38 +365,48 @@ class _TerminateWidgetState extends State<TerminateWidget>
                   ),
                 ],
               ),
-
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(30, 20, 30, 10),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    // await Navigator.push(
-                    //   context,
-                    //   PageTransition(
-                    //     type: PageTransitionType.fade,
-                    //     duration: Duration(milliseconds: 0),
-                    //     reverseDuration: Duration(milliseconds: 0),
-                    //     child: HomePageWidget(),
-                    //   ),
-                    // );
-                  },
-                  text: 'Create Contract',
-                  options: FFButtonOptions(
-                    width: double.infinity,
-                    height: 45,
-                    color: FlutterFlowTheme.of(context).secondaryColor,
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
+        Padding(
+                  padding: const EdgeInsets.only(top: 15, bottom: 15, left:25, right: 25),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
+                    child: ListView.builder(
+                        itemCount: 1,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return ElevatedButton(
+                            onPressed: () {
+                            //deleteProduct();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                'Sitisha',
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary:  Colors.lightGreen,
+                              onPrimary: Colors.black,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .title1
+                                  .override(
+                                fontFamily: 'Ubuntu',
+                                color: Colors.black,
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(15)),
+                            ),
+                          );
+                        }),
                   ),
-                ).animated([animationsMap['buttonOnPageLoadAnimation']!]),
-              ),
+                ),
+
             ],
           ),
         ),

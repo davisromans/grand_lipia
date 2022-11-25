@@ -25,6 +25,7 @@ class sellerRequest {
     required String status,
     required String dealer,
     required String url,
+    required String receiver,
     required String buyerImage,
     required List<File> images,
   }) async {
@@ -52,6 +53,7 @@ class sellerRequest {
         dealer: dealer,
         url: url,
         buyerImage: buyerImage,
+        receiver: receiver,
       );
 
       http.Response res = await http.post(

@@ -3,6 +3,7 @@ import 'package:flutter_platform_alert/flutter_platform_alert.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/Utils/product.dart';
+import 'package:test_app/components/terminate_widget.dart';
 import '../Utils/error_handling.dart';
 import '../Utils/utils.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
@@ -29,6 +30,7 @@ class ContractInfoWidget extends StatefulWidget {
         this.Url,
         this.Status,
         this.buyerImage,
+        this.receiver,
       this.Buyer})
       : super(
           key: key,
@@ -45,6 +47,7 @@ class ContractInfoWidget extends StatefulWidget {
   final Url;
   final buyerImage;
   final Status;
+  final receiver;
 
   @override
   _ContractInfoWidgetState createState() => _ContractInfoWidgetState();
@@ -67,6 +70,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var dpBuyer;
   var dpSeller;
   var status;
+  var receiver;
   fetchAllProducts() async {
     products = await adminServices.fetchAllProducts(context);
     setState(() {});
@@ -346,6 +350,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       dpBuyer = widget.Url;
       dpSeller = widget.buyerImage;
       status = widget.Status;
+      receiver = widget.receiver;
     });
     fetchAllProducts();
   }
@@ -370,7 +375,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         title: Padding(
           padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
           child: Text(
-            'My Contract',
+            'Mkataba',
             style: FlutterFlowTheme.of(context).bodyText2.override(
                   fontFamily: 'Outfit',
                   color: Colors.white,
@@ -450,7 +455,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         15, 19, 0, 0),
                                     child: Text(
-                                      '$sellerName',
+                                      userPhone == widget.Buyer?sellerName:receiver,
                                       textAlign: TextAlign.start,
                                       style: FlutterFlowTheme.of(context)
                                           .title1
@@ -531,7 +536,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                           Text(
-                            'Product Name',
+                            'Jina la bidhaa au huduma',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -593,7 +598,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                           child: Text(
-                            'Product Specifications',
+                            'Maelezo ya bidhaa au huduma',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -655,7 +660,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
                           child: Text(
-                            'Product Price (Plus Derivery)',
+                            'Kiasi',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -714,7 +719,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
                           child: Text(
-                            'Delivery Details (Location)',
+                            'Eneo la kuwasilisha',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -775,7 +780,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Contact',
+                            isSeller == true?'Namba ya muuzaji':'Namba ya mteja',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -840,7 +845,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Product Image ',
+                            'Picha ya bidhaa',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -950,7 +955,13 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                               itemBuilder: (context, index) {
                                 return ElevatedButton(
                                   onPressed: () {
-                                    deleteProduct();
+                                    status == 'Requested'?deleteProduct():
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TerminateWidget()));
+                                    ;
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),

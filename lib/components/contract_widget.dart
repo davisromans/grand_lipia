@@ -37,6 +37,7 @@ class _ContractWidgetState extends State<ContractWidget>
   bool infoSearch = false;
   var buyerImage = '';
   bool contractActivate = false;
+  var buyerName;
   var url;
   getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -258,6 +259,7 @@ class _ContractWidgetState extends State<ContractWidget>
         status: status.toString(),
         dealer: sellerName,
         url: url,
+        receiver: buyerName,
         buyerImage: buyerImage,
       );
     } else {
@@ -805,6 +807,7 @@ class _ContractWidgetState extends State<ContractWidget>
                             child: ElevatedButton(
                               onPressed: () {
                                 fetchBuyer();
+
                               },
                               child: Icon(
                                 Icons.check,
@@ -843,6 +846,7 @@ class _ContractWidgetState extends State<ContractWidget>
                             physics: const NeverScrollableScrollPhysics(),
                           itemCount: 1,
                             itemBuilder: (context, index) {
+                              buyerName = infoList[index]['name'];
                               buyerImage = infoList[index]['images'].length > 0?
                               infoList[index]['images'][0]:
                               'https://www.linkpicture.com/q/dp_3.png';

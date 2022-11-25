@@ -15,6 +15,7 @@ class Product {
   final String dealer;
   final String url;
   final String buyerImage;
+  final String receiver;
   final List<Rating>? rating;
   Product({
     required this.name,
@@ -28,6 +29,7 @@ class Product {
     required this.dealer,
     required this.url,
     required this.buyerImage,
+    required this.receiver,
     this.id,
     this.rating,
   });
@@ -47,6 +49,7 @@ class Product {
       'dealer': dealer,
       'url': url,
       'buyerImage': buyerImage,
+      'receiver': receiver,
     };
   }
 
@@ -62,6 +65,7 @@ class Product {
       buyer: map['buyer'] ?? '',
       seller: map['seller'] ?? '',
       dealer: map['dealer'] ?? '',
+      receiver: map['receiver'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       id: map['_id'],
       rating: map['ratings'] != null

@@ -243,15 +243,15 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     fetchAllProducts();
   }
 
-  var salutation = 'Morning';
+  var salutation = '';
   String greeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
-      salutation = 'Good Morining!';
+      salutation = 'Good Morning!';
     }
-    if (hour < 15) {
+   else if (hour < 15) {
       salutation = 'Good Afternoon!';
-    } if (hour >= 15) {
+    } else if (hour >= 15) {
       salutation = 'Good Evening!';
     }
     return 'Morning';
@@ -325,682 +325,681 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
       //BUTTON LOCATION
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
-          child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Stack(children: [
-                Align(
-                    alignment: AlignmentDirectional(0, 0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
                     child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF272727),
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.15),
-                                    spreadRadius: 1,
-                                    blurRadius: 0,
-                                    offset: Offset(1, 1),
+                      children: [
+                        Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF272727),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.15),
+                                        spreadRadius: 1,
+                                        blurRadius: 0,
+                                        offset: Offset(1, 1),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 0, 10, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.white,
-                                          width: 1,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.white70,
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                          ),
-                                        ],
-                                        color: Color(0xFFEEEEEE),
-                                        image: dpUrl == '' || dpUrl == null?DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                            'https://www.linkpicture.com/q/dp_3.png',
-                                          ),
-                                        ):DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                            dpUrl,
-                                          )
-                                        ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    15, 19, 0, 0),
-                                            child: Text(
-                                              '$username',
-                                              textAlign: TextAlign.start,
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .title1
-                                                  .override(
-                                                    fontFamily: 'Outfit',
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(15, 4, 0, 0),
-                                                  child: RatingBar(
-                                                      initialRating: 0,
-                                                      direction: Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      itemCount: 5,
-                                                      itemSize: 20,
-                                                      ignoreGestures: true,
-                                                      updateOnDrag: true,
-                                                      glow: true,
-                                                      glowColor:
-                                                          Color(0xFFFF5E01),
-                                                      glowRadius: 2,
-                                                      ratingWidget:
-                                                          RatingWidget(
-                                                              full: const Icon(
-                                                                  Icons.star,
-                                                                  color: Color(
-                                                                      0xFFFF5E01)),
-                                                              half: const Icon(
-                                                                Icons.star_half,
-                                                                color: Color(
-                                                                    0xFFFF5E01),
-                                                              ),
-                                                              empty: const Icon(
-                                                                Icons
-                                                                    .star_outline,
-                                                                color: Color(
-                                                                    0xFFFF5E01),
-                                                              )),
-                                                      onRatingUpdate: (value) {
-                                                        setState(() {
-                                                          _ratingValue = value;
-                                                        });
-                                                      }),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(6, 6, 0, 0),
-                                                  child: Text(
-                                                    _ratingValue != null
-                                                        ? _ratingValue
-                                                                .toString() +
-                                                            ' of 5.0'
-                                                        : 'No rating yet!',
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ).animated(
-                                [animationsMap['textOnPageLoadAnimation3']!]),
-                          ),
-                          // Ads Container // Ads Container // Ads Container
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF272727),
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.15),
-                                    spreadRadius: 1,
-                                    blurRadius: 0,
-                                    offset: Offset(1, 1),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 0, 10, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFEEEEEE),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: Image.asset(
-                                            'assets/images/money.png',
-                                          ).image,
-                                        ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    15, 0, 0, 0),
-                                            child: Text(
-                                              'Gain Trust',
-                                              textAlign: TextAlign.start,
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .title1
-                                                  .override(
-                                                    fontFamily: 'Outfit',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(15, 4, 0, 0),
-                                                  child: Text(
-                                                    'Get star ratings when you complete\na contract to gain more trust ',
-                                                    textAlign: TextAlign.start,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .title1
-                                                        .override(
-                                                          fontFamily: 'Outfit',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ).animated([
-                              animationsMap['containerOnPageLoadAnimation1']!
-                            ]),
-                          ),
-                          // Contract  // Contract
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 0, 3),
-                                  child: Text(
-                                    'Initiate Contract',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyText2
-                                        .override(
-                                          fontFamily: 'Outfit',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                  ).animated([
-                                    animationsMap['textOnPageLoadAnimation4']!
-                                  ]),
-                                ),
-                              ],
-                            ),
-                          ),
-                                  Padding(
+                                  child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 8, 10, 0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ContractWidget(
-                                                      Url: dpUrl,
-                                                    )));
-                                      },
-                                      child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 80,
+                                        10, 0, 10, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 60,
                                           decoration: BoxDecoration(
-                                            color: Color(0xFF272727),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: 1,
+                                            ),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.15),
-                                                spreadRadius: 1,
-                                                blurRadius: 0,
-                                                offset: Offset(1, 1),
+                                                color: Colors.white70,
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                              ),
+                                            ],
+                                            color: Color(0xFFEEEEEE),
+                                            image: dpUrl == '' || dpUrl == null?DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                'https://www.linkpicture.com/q/dp_3.png',
+                                              ),
+                                            ):DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                dpUrl,
+                                              )
+                                            ),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    EdgeInsetsDirectional.fromSTEB(
+                                                        15, 19, 0, 0),
+                                                child: Text(
+                                                  '$username',
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .title1
+                                                      .override(
+                                                        fontFamily: 'Outfit',
+                                                        color: Colors.white,
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsetsDirectional
+                                                          .fromSTEB(15, 4, 0, 0),
+                                                      child: RatingBar(
+                                                          initialRating: 0,
+                                                          direction: Axis.horizontal,
+                                                          allowHalfRating: true,
+                                                          itemCount: 5,
+                                                          itemSize: 20,
+                                                          ignoreGestures: true,
+                                                          updateOnDrag: true,
+                                                          glow: true,
+                                                          glowColor:
+                                                              Color(0xFFFF5E01),
+                                                          glowRadius: 2,
+                                                          ratingWidget:
+                                                              RatingWidget(
+                                                                  full: const Icon(
+                                                                      Icons.star,
+                                                                      color: Color(
+                                                                          0xFFFF5E01)),
+                                                                  half: const Icon(
+                                                                    Icons.star_half,
+                                                                    color: Color(
+                                                                        0xFFFF5E01),
+                                                                  ),
+                                                                  empty: const Icon(
+                                                                    Icons
+                                                                        .star_outline,
+                                                                    color: Color(
+                                                                        0xFFFF5E01),
+                                                                  )),
+                                                          onRatingUpdate: (value) {
+                                                            setState(() {
+                                                              _ratingValue = value;
+                                                            });
+                                                          }),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsetsDirectional
+                                                          .fromSTEB(6, 6, 0, 0),
+                                                      child: Text(
+                                                        _ratingValue != null
+                                                            ? _ratingValue
+                                                                    .toString() +
+                                                                ' of 5.0'
+                                                            : 'No rating yet!',
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    10, 0, 10, 0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.white70,
-                                                        spreadRadius: 2,
-                                                        blurRadius: 5,
-                                                      ),
-                                                    ],
-                                                    color: Color(0xFFEEEEEE),
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: Image.asset(
-                                                        'assets/images/senero.jpg',
-                                                      ).image,
-                                                    ),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        15,
-                                                                        0,
-                                                                        0,
-                                                                        0),
-                                                            child: Text(
-                                                              'Create a contract',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .title1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Outfit',
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryText,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        15,
-                                                                        4,
-                                                                        0,
-                                                                        0),
-                                                            child: Text(
-                                                              'Is there a product that you wish to Sell?',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .title1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Outfit',
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryText,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w300,
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                      8, 4, 0, 0),
-                                                  child: Icon(Icons
-                                                      .arrow_forward_ios_sharp),
-                                                )
-                                              ],
-                                            ),
-                                          )),
-                                    ).animated([
-                                      animationsMap[
-                                          'containerOnPageLoadAnimation1']!
-                                    ]),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  20, 0, 0, 3),
-                                          child: Text(
-                                            'My Contract',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2
-                                                .override(
-                                                  fontFamily: 'Outfit',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                          ).animated([
-                                            animationsMap[
-                                                'textOnPageLoadAnimation4']!
-                                          ]),
                                         ),
                                       ],
                                     ),
                                   ),
-                          products == null?Container():
-                          Expanded(
-                            child: ListView.builder(
-                                      itemCount: products!.length,
-                                        shrinkWrap: true,
-                                        itemBuilder: (c, i) {
-                                          final productData = products![i];
-                                        if(userPhone == productData.buyer || userPhone == productData.seller){
-                                            checker = true;
-                                        }
-                                            return checker && userPhone == productData.buyer || userPhone == productData.seller ?Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(10, 8, 10, 0),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => ContractInfoWidget(
-                                                              Name:  productData.name,
-                                                            Specs: productData.description,
-                                                            Amount: productData.price,
-                                                            Location: productData.location,
-                                                            Image: productData.images,
-                                                            Buyer: productData.buyer,
-                                                            Seller: productData.seller,
-                                                            Id: productData.id,
-                                                            Dealer: productData.dealer,
-                                                            Url: productData.url,
-                                                            Status: productData.status,
-                                                            buyerImage: productData.buyerImage,
-                                                          )));
-                                                },
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  height: 80,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xFF272727),
-                                                    borderRadius:
-                                                        BorderRadius.circular(8),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(0.15),
-                                                        spreadRadius: 1,
-                                                        blurRadius: 0,
-                                                        offset: Offset(1, 1),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(10, 0, 10, 0),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Container(
-                                                          width: 60,
-                                                          height: 60,
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                              color: Colors.white,
-                                                              width: 1,
-                                                            ),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color:
-                                                                    Colors.white70,
-                                                                spreadRadius: 2,
-                                                                blurRadius: 5,
-                                                              ),
-                                                            ],
-                                                            color:
-                                                                Color(0xFFEEEEEE),
-                                                            image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image: NetworkImage(
-                                                               userPhone == productData.buyer?
-                                                               productData.url: productData.buyerImage,
-                                                              ),
-                                                            ),
-                                                            shape: BoxShape.circle,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child:
-                                                          Row(
-                                                            children: [
-                                                              Column(
-                                                                mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                                mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    . center,
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                        15,
-                                                                        0,
-                                                                        0,
-                                                                        0),
-                                                                    child: Text(
-                                                                      productData.name,
-                                                                      textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                      style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                          .title1
-                                                                          .override(
-                                                                        fontFamily:
-                                                                        'Outfit',
-                                                                        color:
-                                                                        FlutterFlowTheme.of(context).primaryText,
-                                                                        fontSize:
-                                                                        18,
-                                                                        fontWeight:
-                                                                        FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    child:
-                                                                    Column(
-                                                                      mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                      crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              15,
-                                                                              0,
-                                                                              0,
-                                                                              0),
-                                                                          child:
-                                                                          Text(
-                                                                            'Active time: 02:10 04/04/2022',
-                                                                            textAlign:
-                                                                            TextAlign.start,
-                                                                            style: FlutterFlowTheme.of(context).title1.override(
-                                                                              fontFamily: 'Outfit',
-                                                                              color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.w300,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              15,
-                                                                              4,
-                                                                              0,
-                                                                              0),
-                                                                          child:
-                                                                          Text(
-                                                                           'Status: ' + productData.status,
-                                                                            textAlign:
-                                                                            TextAlign.start,
-                                                                            style: FlutterFlowTheme.of(context).title1.override(
-                                                                              fontFamily: 'Outfit',
-                                                                              color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.w300,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                                          child: Icon(Icons
-                                                              .arrow_forward_ios_sharp),
-                                                        ),
-                                                      ]),
-                                                    ),
-                                                  ),
-                                                ).animated([
-                                                  animationsMap[
-                                                      'containerOnPageLoadAnimation1']!
-                                                ]),
-                                              ):Text('');},
+                                ).animated(
+                                    [animationsMap['textOnPageLoadAnimation3']!]),
+                              ),
+                              // Ads Container // Ads Container // Ads Container
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF272727),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.15),
+                                        spreadRadius: 1,
+                                        blurRadius: 0,
+                                        offset: Offset(1, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        10, 0, 10, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFEEEEEE),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: Image.asset(
+                                                'assets/images/money.png',
+                                              ).image,
+                                            ),
+                                            shape: BoxShape.circle,
                                           ),
-                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    EdgeInsetsDirectional.fromSTEB(
+                                                        15, 0, 0, 0),
+                                                child: Text(
+                                                  'Gain Trust',
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .title1
+                                                      .override(
+                                                        fontFamily: 'Outfit',
+                                                        color: FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText,
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsetsDirectional
+                                                          .fromSTEB(15, 4, 0, 0),
+                                                      child: Text(
+                                                        'Get star ratings when you complete\na contract to gain more trust ',
+                                                        textAlign: TextAlign.start,
+                                                        style: FlutterFlowTheme.of(
+                                                                context)
+                                                            .title1
+                                                            .override(
+                                                              fontFamily: 'Outfit',
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryText,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight.w300,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
+                                ).animated([
+                                  animationsMap['containerOnPageLoadAnimation1']!
                                 ]),
+                              ),
+                              // Contract  // Contract
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          20, 0, 0, 3),
+                                      child: Text(
+                                        'Initiate Contract',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              color: FlutterFlowTheme.of(context)
+                                                  .primaryText,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                      ).animated([
+                                        animationsMap['textOnPageLoadAnimation4']!
+                                      ]),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10, 8, 10, 0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ContractWidget(
+                                                          Url: dpUrl,
+                                                        )));
+                                          },
+                                          child: Container(
+                                              width:
+                                                  MediaQuery.of(context).size.width,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF272727),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.15),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 0,
+                                                    offset: Offset(1, 1),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsetsDirectional.fromSTEB(
+                                                        10, 0, 10, 0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: [
+                                                    Container(
+                                                      width: 60,
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 1,
+                                                        ),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.white70,
+                                                            spreadRadius: 2,
+                                                            blurRadius: 5,
+                                                          ),
+                                                        ],
+                                                        color: Color(0xFFEEEEEE),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: Image.asset(
+                                                            'assets/images/senero.jpg',
+                                                          ).image,
+                                                        ),
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            15,
+                                                                            0,
+                                                                            0,
+                                                                            0),
+                                                                child: Text(
+                                                                  'Create a contract',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme
+                                                                          .of(context)
+                                                                      .title1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Outfit',
+                                                                        color: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .primaryText,
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            15,
+                                                                            4,
+                                                                            0,
+                                                                            0),
+                                                                child: Text(
+                                                                  'Is there a product that you wish to Sell?',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme
+                                                                          .of(context)
+                                                                      .title1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Outfit',
+                                                                        color: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .primaryText,
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w300,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(
+                                                          8, 4, 0, 0),
+                                                      child: Icon(Icons
+                                                          .arrow_forward_ios_sharp),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        ).animated([
+                                          animationsMap[
+                                              'containerOnPageLoadAnimation1']!
+                                        ]),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.fromSTEB(
+                                                      20, 0, 0, 3),
+                                              child: Text(
+                                                'My Contract',
+                                                textAlign: TextAlign.center,
+                                                style: FlutterFlowTheme.of(context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Outfit',
+                                                      color: FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryText,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
+                                              ).animated([
+                                                animationsMap[
+                                                    'textOnPageLoadAnimation4']!
+                                              ]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                          ],
+                                      ),
+                        products == null?Container():
+                        ListView.builder(
+                            itemCount: products!.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (c, i) {
+                              final productData = products![i];
+                              if(userPhone == productData.buyer || userPhone == productData.seller){
+                                checker = true;
+                              }
+                              return checker && userPhone == productData.buyer || userPhone == productData.seller ?Padding(
+                                padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 8, 10, 0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ContractInfoWidget(
+                                              Name:  productData.name,
+                                              Specs: productData.description,
+                                              Amount: productData.price,
+                                              Location: productData.location,
+                                              Image: productData.images,
+                                              Buyer: productData.buyer,
+                                              Seller: productData.seller,
+                                              Id: productData.id,
+                                              Dealer: productData.dealer,
+                                              Url: productData.url,
+                                              Status: productData.status,
+                                              buyerImage: productData.buyerImage,
+                                              receiver: productData.receiver,
+                                            )));
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF272727),
+                                      borderRadius:
+                                      BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black
+                                              .withOpacity(0.15),
+                                          spreadRadius: 1,
+                                          blurRadius: 0,
+                                          offset: Offset(1, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional
+                                          .fromSTEB(10, 0, 10, 0),
+                                      child: Row(
+                                          mainAxisSize:
+                                          MainAxisSize.max,
+                                          children: [
+                                            Container(
+                                              width: 60,
+                                              height: 60,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 1,
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color:
+                                                    Colors.white70,
+                                                    spreadRadius: 2,
+                                                    blurRadius: 5,
+                                                  ),
+                                                ],
+                                                color:
+                                                Color(0xFFEEEEEE),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(
+                                                    userPhone == productData.buyer?
+                                                    productData.url: productData.buyerImage,
+                                                  ),
+                                                ),
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child:
+                                              Row(
+                                                children: [
+                                                  Column(
+                                                    mainAxisSize:
+                                                    MainAxisSize
+                                                        .max,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        . center,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                            15,
+                                                            0,
+                                                            0,
+                                                            0),
+                                                        child: Text(
+                                                          productData.name,
+                                                          textAlign:
+                                                          TextAlign
+                                                              .start,
+                                                          style: FlutterFlowTheme.of(
+                                                              context)
+                                                              .title1
+                                                              .override(
+                                                            fontFamily:
+                                                            'Outfit',
+                                                            color:
+                                                            FlutterFlowTheme.of(context).primaryText,
+                                                            fontSize:
+                                                            18,
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child:
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsetsDirectional.fromSTEB(
+                                                                  15,
+                                                                  0,
+                                                                  0,
+                                                                  0),
+                                                              child:
+                                                              Text(
+                                                                'Active time: 02:10 04/04/2022',
+                                                                textAlign:
+                                                                TextAlign.start,
+                                                                style: FlutterFlowTheme.of(context).title1.override(
+                                                                  fontFamily: 'Outfit',
+                                                                  color: FlutterFlowTheme.of(context).primaryText,
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w300,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsetsDirectional.fromSTEB(
+                                                                  15,
+                                                                  4,
+                                                                  0,
+                                                                  0),
+                                                              child:
+                                                              Text(
+                                                                'Status: ' + productData.status,
+                                                                textAlign:
+                                                                TextAlign.start,
+                                                                style: FlutterFlowTheme.of(context).title1.override(
+                                                                  fontFamily: 'Outfit',
+                                                                  color: FlutterFlowTheme.of(context).primaryText,
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w300,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                              child: Icon(Icons
+                                                  .arrow_forward_ios_sharp),
+                                            ),
+                                          ]),
+                                    ),
+                                  ),
+                                ).animated([
+                                  animationsMap[
+                                  'containerOnPageLoadAnimation1']!
+                                ]),
+                              ):Text('');},
+                          ),
+                      ],
+                    ),
                           )
     ));
   }
