@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:test_app/Utils/rating.dart';
+
 class User {
   final String id;
   final String name;
@@ -77,6 +79,7 @@ class updateUser {
   final String password;
   final String productPhone;
   final List<String> images;
+  final List<Rating>? rating;
   final String dpUrl;
 
   updateUser( {
@@ -87,6 +90,7 @@ class updateUser {
     required this.images,
     required this.productPhone,
     required this.dpUrl,
+    this.rating,
   });
 
   Map<String, dynamic> toMap() {
@@ -98,6 +102,7 @@ class updateUser {
       'images': images,
       'productPhone': productPhone,
       'dpUrl': dpUrl,
+      'rating': rating,
     };
   }
 
@@ -110,6 +115,13 @@ class updateUser {
       password: map['password'] ?? '',
       dpUrl: map['dpUrl'] ?? '',
       images: List<String>.from(map['images']),
+      rating: map['ratings'] != null
+          ? List<Rating>.from(
+        map['ratings']?.map(
+              (x) => Rating.fromMap(x),
+        ),
+      )
+          : null,
     );
   }
 

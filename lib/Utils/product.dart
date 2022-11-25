@@ -16,7 +16,7 @@ class Product {
   final String url;
   final String buyerImage;
   final String receiver;
-  final List<Rating>? rating;
+  final String sellerId;
   Product({
     required this.name,
     required this.description,
@@ -30,8 +30,8 @@ class Product {
     required this.url,
     required this.buyerImage,
     required this.receiver,
+    required this.sellerId,
     this.id,
-    this.rating,
   });
 
   Map<String, dynamic> toMap() {
@@ -44,12 +44,12 @@ class Product {
       'seller': seller,
       'price': price,
       'id': id,
-      'rating': rating,
       'status': status,
       'dealer': dealer,
       'url': url,
       'buyerImage': buyerImage,
       'receiver': receiver,
+      'sellerId' : sellerId,
     };
   }
 
@@ -68,13 +68,7 @@ class Product {
       receiver: map['receiver'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       id: map['_id'],
-      rating: map['ratings'] != null
-          ? List<Rating>.from(
-              map['ratings']?.map(
-                (x) => Rating.fromMap(x),
-              ),
-            )
-          : null,
+      sellerId: map['sellerId'] ?? '',
     );
   }
 

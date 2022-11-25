@@ -74,7 +74,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           ),
                           SizedBox(width: 20),
                           Text(
-                            'Senero',
+                            'Lipia',
                             style: FlutterFlowTheme.of(context).title1.override(
                                   fontFamily: 'Outfit',
                                   color:

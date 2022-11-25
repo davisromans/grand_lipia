@@ -207,12 +207,13 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  double? _ratingValue;
+  double _ratingValue = 0;
   int _curIndex = 0;
   var username;
   var userPhone;
   var checker = false;
   var dpUrl;
+  var rating;
 
   fetchAllProducts() async {
     products = await adminServices.fetchAllProducts(context);
@@ -223,7 +224,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     username =  prefs.getString('name');
     userPhone = prefs.getString('phone');
     dpUrl = prefs.getString('dp')!;
+    rating = prefs.getString('rating');
+    if(rating.length>15){
+        rating = rating.substring(0, 3);
+    }
     greeting();
+    _ratingValue = double.parse(rating);
   }
 
   @override
@@ -418,7 +424,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                       padding: EdgeInsetsDirectional
                                                           .fromSTEB(15, 4, 0, 0),
                                                       child: RatingBar(
-                                                          initialRating: 0,
+                                                          initialRating: rating != null?_ratingValue:0.0,
                                                           direction: Axis.horizontal,
                                                           allowHalfRating: true,
                                                           itemCount: 5,
@@ -446,21 +452,13 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                     color: Color(
                                                                         0xFFFF5E01),
                                                                   )),
-                                                          onRatingUpdate: (value) {
-                                                            setState(() {
-                                                              _ratingValue = value;
-                                                            });
-                                                          }),
+                                                          onRatingUpdate: (value) {}),
                                                     ),
                                                     Padding(
                                                       padding: EdgeInsetsDirectional
                                                           .fromSTEB(6, 6, 0, 0),
                                                       child: Text(
-                                                        _ratingValue != null
-                                                            ? _ratingValue
-                                                                    .toString() +
-                                                                ' of 5.0'
-                                                            : 'No rating yet!',
+                                                        rating != null?rating + ' /s 5.0':'',
                                                         style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 16),
@@ -831,6 +829,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                               Status: productData.status,
                                               buyerImage: productData.buyerImage,
                                               receiver: productData.receiver,
+                                              sellerId: productData.sellerId,
                                             )));
                                   },
                                   child: Container(

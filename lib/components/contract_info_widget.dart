@@ -31,6 +31,7 @@ class ContractInfoWidget extends StatefulWidget {
         this.Status,
         this.buyerImage,
         this.receiver,
+        this.sellerId,
       this.Buyer})
       : super(
           key: key,
@@ -48,6 +49,7 @@ class ContractInfoWidget extends StatefulWidget {
   final buyerImage;
   final Status;
   final receiver;
+  final sellerId;
 
   @override
   _ContractInfoWidgetState createState() => _ContractInfoWidgetState();
@@ -71,6 +73,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var dpSeller;
   var status;
   var receiver;
+  var sellerId;
+  var userId;
+
   fetchAllProducts() async {
     products = await adminServices.fetchAllProducts(context);
     setState(() {});
@@ -284,6 +289,37 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     }
   }
 
+  Future<void> userRating() async {
+    print(_ratingValue);
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/rate-user'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'id': widget.sellerId,
+          'rating' : _ratingValue,
+          'userId' : userId,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
+          showSnackBar(context, 'asante kwa kufanya biashara nasi');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   Future<void> activeContract() async {
     try {
       http.Response res = await http.post(
@@ -316,6 +352,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   getType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userPhone = prefs.getString('phone');
+    userId = prefs.getString('id');
     if (userPhone == widget.Buyer) {
       buyer.text = widget.Seller;
       setState(() {
@@ -1083,6 +1120,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         alignment: Alignment.bottomRight,
                         child: TextButton(
                           onPressed: () {
+                            userRating();
                             Navigator.pop(context);
                           },
                           child: Text('ok'),

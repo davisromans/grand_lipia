@@ -36,6 +36,7 @@ class _ContractWidgetState extends State<ContractWidget>
   List infoList = [];
   bool infoSearch = false;
   var buyerImage = '';
+  var sellerId;
   bool contractActivate = false;
   var buyerName;
   var url;
@@ -44,6 +45,7 @@ class _ContractWidgetState extends State<ContractWidget>
     setState(() {
       sellerPhone = prefs.getString('phone');
       sellerName = prefs.getString('name');
+      sellerId =  prefs.getString('id');
       if(widget.Url == ''){
         url = 'https://www.linkpicture.com/q/dp_3.png';
       }else{
@@ -261,6 +263,7 @@ class _ContractWidgetState extends State<ContractWidget>
         url: url,
         receiver: buyerName,
         buyerImage: buyerImage,
+        sellerId: sellerId,
       );
     } else {
       showSnackBar(

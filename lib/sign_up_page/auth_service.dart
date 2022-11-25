@@ -79,22 +79,45 @@ class AuthService {
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           var returnData = jsonDecode(res.body);
+
           print(returnData);
            prefs.setString('phone', returnData['phone']);
            prefs.setString('name', returnData['name']);
            prefs.setString('id', returnData['_id']);
+           var ratings = returnData['ratings'];
+          // print(rating.length['rating']);
            if(returnData['images'].length > 0){
-             print('inapita');
+
              prefs.setString('dp', returnData['images'][0]);
            }else{
              prefs.setString('dp', '');
            }
-          Navigator.push(
+          double avgRating = 0;
+          double myRating = 0;
+          double totalRating = 0;
+
+          if( returnData['ratings'].length > 0){
+          for (int i = 0; i < ratings.length; i++) {
+            totalRating +=ratings[i]['rating'];
+          }
+
+          if (totalRating != 0) {
+            avgRating = totalRating / ratings.length;
+            prefs.setString('rating', avgRating.toString());
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        NavigationScreen()));
+          }
+          }else{
+            prefs.setString('rating', 'No ratings yet');
+         Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       NavigationScreen()));
-        }
+        }}
           );
     } catch (e) {
       showSnackBar(context, e.toString());
