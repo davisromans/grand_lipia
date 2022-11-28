@@ -1,13 +1,35 @@
 import 'package:test_app/home_page/home_page_widget.dart';
+import '../Utils/error_handling.dart';
+import '../Utils/utils.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../screen_navigation_widget.dart';
+
 
 class TerminateWidget extends StatefulWidget {
-  const TerminateWidget({Key? key}) : super(key: key);
+  const TerminateWidget({Key? key,
+  this.id,
+    this.buyer,
+    this.seller,
+    this.product,
+    this.type,
+    this.amount,
+    this.imageSeller,
+    this.imageBuyer,
+  }) : super(key: key);
+  final id;
+  final buyer;
+  final seller;
+  final product;
+  final type;
+  final amount;
+  final imageSeller;
+  final imageBuyer;
 
   @override
   _TerminateWidgetState createState() => _TerminateWidgetState();
@@ -195,6 +217,75 @@ class _TerminateWidgetState extends State<TerminateWidget>
     ),
   };
 
+  Future<void> deleteProduct() async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/admin/delete-product'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'id': widget.id,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
+          showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> history() async {
+    DateTime now = DateTime. now();
+    DateFormat formatter = DateFormat('dd-MM-yyyy');
+    String formattedDate = formatter. format(now);
+
+    DateTime date = DateTime.now();
+    String formattedTime = DateFormat.Hms().format(date);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/history'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'id': widget.id,
+          'buyer': widget.buyer,
+          'seller': widget.seller,
+          'product': widget.product,
+          'type': widget.type,
+          'amount': widget.amount,
+          'imageSeller':widget.imageSeller,
+          'imageBuyer':widget.imageBuyer,
+          'date': formattedDate,
+          'time': formattedTime,
+          'status': 'Cancelled',
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'history made');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -379,7 +470,8 @@ class _TerminateWidgetState extends State<TerminateWidget>
                         itemBuilder: (context, index) {
                           return ElevatedButton(
                             onPressed: () {
-                            //deleteProduct();
+                              history();
+                             deleteProduct();
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),

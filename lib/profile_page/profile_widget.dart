@@ -362,7 +362,7 @@ class _ProfileWidgetState extends State<ProfileWidget> with TickerProviderStateM
           title: Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
             child: Text(
-              'Profile',
+              'Wasifu',
               style: FlutterFlowTheme.of(context).bodyText2.override(
                     fontFamily: 'Outfit',
                     color: Colors.white,

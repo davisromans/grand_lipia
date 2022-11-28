@@ -13,7 +13,6 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../login_page/login_page_widget.dart';
-import 'package:provider/provider.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key,}) : super(key: key);
@@ -214,6 +213,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
   var checker = false;
   var dpUrl;
   var rating;
+  var salutation = '';
 
   fetchAllProducts() async {
     products = await adminServices.fetchAllProducts(context);
@@ -249,8 +249,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     fetchAllProducts();
   }
 
-  var salutation = '';
-  String greeting() {
+   greeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
       salutation = 'Good Morning!';
@@ -268,54 +267,54 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      appBar: AppBar(
-        centerTitle: false,
-        automaticallyImplyLeading: false,
-        title: Text(salutation),
-        backgroundColor: Colors.transparent,
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        actions: [
-          PopupMenuButton(
-              // add icon, by default "3 dot" icon
-              // icon: Icon(Icons.book)
-              itemBuilder: (context) {
-            return [
-              PopupMenuItem<int>(
-                value: 0,
-                child: Text("Profile"),
-              ),
-              PopupMenuItem<int>(
-                value: 1,
-                child: Text("Transactions"),
-              ),
-              PopupMenuItem<int>(
-                value: 2,
-                child: Text("Log out"),
-              ),
-            ];
-          }, onSelected: (value) {
-            if (value == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileWidget()),
-              );
-            } else if (value == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const TransactionWidget()),
-              );
-            } else if (value == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const LoginPageWidget()),
-              );
-            }
-          }),
-        ],
-      ),
+      // appBar: AppBar(
+      //   centerTitle: false,
+      //   automaticallyImplyLeading: false,
+      //   title: Text(salutation),
+      //   backgroundColor: Colors.transparent,
+      //   bottomOpacity: 0.0,
+      //   elevation: 0.0,
+      //   actions: [
+      //     PopupMenuButton(
+      //         // add icon, by default "3 dot" icon
+      //         // icon: Icon(Icons.book)
+      //         itemBuilder: (context) {
+      //       return [
+      //         PopupMenuItem<int>(
+      //           value: 0,
+      //           child: Text("Profile"),
+      //         ),
+      //         PopupMenuItem<int>(
+      //           value: 1,
+      //           child: Text("Transactions"),
+      //         ),
+      //         PopupMenuItem<int>(
+      //           value: 2,
+      //           child: Text("Log out"),
+      //         ),
+      //       ];
+      //     }, onSelected: (value) {
+      //       if (value == 0) {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => const ProfileWidget()),
+      //         );
+      //       } else if (value == 1) {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //               builder: (context) => const TransactionWidget()),
+      //         );
+      //       } else if (value == 2) {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //               builder: (context) => const LoginPageWidget()),
+      //         );
+      //       }
+      //     }),
+      //   ],
+      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF2A2929),
         splashColor: Color(0xFFFF5E01),
@@ -339,12 +338,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                             children: [
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                                    EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 80,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF272727),
+                                    color: Color(0xFF1A2023),
                                     borderRadius: BorderRadius.circular(8),
                                     boxShadow: [
                                       BoxShadow(
@@ -412,7 +411,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                       .override(
                                                         fontFamily: 'Outfit',
                                                         color: Colors.white,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
                                                         fontWeight: FontWeight.w500,
                                                       ),
                                                 ),
@@ -458,7 +457,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                       padding: EdgeInsetsDirectional
                                                           .fromSTEB(6, 6, 0, 0),
                                                       child: Text(
-                                                        rating != null?rating + ' /s 5.0':'',
+                                                        rating != null?rating + ' / 5.0':'',
                                                         style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 16),
@@ -484,7 +483,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                   width: MediaQuery.of(context).size.width,
                                   height: 80,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF272727),
+                                    color: Color(0xFF1A2023),
                                     borderRadius: BorderRadius.circular(8),
                                     boxShadow: [
                                       BoxShadow(
@@ -537,7 +536,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                         color: FlutterFlowTheme.of(
                                                                 context)
                                                             .primaryText,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
                                                         fontWeight: FontWeight.w500,
                                                       ),
                                                 ),
@@ -626,7 +625,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                   MediaQuery.of(context).size.width,
                                               height: 80,
                                               decoration: BoxDecoration(
-                                                color: Color(0xFF272727),
+                                                color: Color(0xFF1A2023),
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 boxShadow: [
@@ -705,7 +704,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                                 context)
                                                                             .primaryText,
                                                                         fontSize:
-                                                                            18,
+                                                                            16,
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .w500,
@@ -720,28 +719,27 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                             4,
                                                                             0,
                                                                             0),
-                                                                child: Text(
-                                                                  'Is there a product that you wish to Sell?',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: FlutterFlowTheme
-                                                                          .of(context)
-                                                                      .title1
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Outfit',
-                                                                        color: FlutterFlowTheme.of(
-                                                                                context)
-                                                                            .primaryText,
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w300,
-                                                                      ),
+                                                                  child: Text(
+                                                                    'Is there a product that you wish to Sell?',
+
+                                                                    textAlign: TextAlign.start,
+                                                                    style: FlutterFlowTheme
+                                                                            .of(context)
+                                                                        .title1
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Outfit',
+                                                                          color: FlutterFlowTheme.of(
+                                                                                  context)
+                                                                              .primaryText,
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w300,
+                                                                        ),
+                                                                  ),
                                                                 ),
-                                                              ),
                                                             ],
                                                           ),
                                                         ],
@@ -830,6 +828,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                               buyerImage: productData.buyerImage,
                                               receiver: productData.receiver,
                                               sellerId: productData.sellerId,
+
                                             )));
                                   },
                                   child: Container(
@@ -838,7 +837,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                         .width,
                                     height: 80,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF272727),
+                                      color: Color(0xFF1A2023),
                                       borderRadius:
                                       BorderRadius.circular(8),
                                       boxShadow: [
@@ -946,7 +945,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                   0),
                                                               child:
                                                               Text(
-                                                                'Active time: 02:10 04/04/2022',
+                                                                'Muda: ' + productData.deliveryDate,
                                                                 textAlign:
                                                                 TextAlign.start,
                                                                 style: FlutterFlowTheme.of(context).title1.override(
@@ -965,7 +964,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                   0),
                                                               child:
                                                               Text(
-                                                                'Status: ' + productData.status,
+                                                                'Hali: ' + productData.status,
                                                                 textAlign:
                                                                 TextAlign.start,
                                                                 style: FlutterFlowTheme.of(context).title1.override(
@@ -1001,28 +1000,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                     ),
                           )
     ));
-  }
-
-  Widget _getWidget() {
-    switch (_curIndex) {
-      case 0:
-        return Container(
-          color: Colors.red,
-          child: TransactionWidget(),
-        );
-        break;
-      case 1:
-        return Container(
-          color: Colors.red,
-          child: HomePageWidget(),
-        );
-        break;
-      default:
-        return Container(
-          child: ProfileWidget(),
-        );
-        break;
-    }
   }
 }
 

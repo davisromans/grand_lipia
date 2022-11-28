@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:test_app/screen_navigation_widget.dart';
 import 'Utils/user_provider.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/internationalization.dart';
-import 'index.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -59,7 +59,10 @@ class _MyAppState extends State<MyApp> {
       ],
       locale: _locale,
       supportedLocales: const [Locale('en', '')],
-      theme: ThemeData(brightness: Brightness.light),
+      theme: ThemeData(brightness: Brightness.light,
+        textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Colors.white, //thereby
+      ),),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: _themeMode,
       home: displaySplashImage
@@ -72,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       )
-          : LoginPageWidget(),
+          : NavigationScreen(),
     );
   }
 }

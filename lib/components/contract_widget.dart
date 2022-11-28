@@ -14,7 +14,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ContractWidget extends StatefulWidget {
-  const ContractWidget({Key? key,
+  const ContractWidget({
+    Key? key,
     this.Url,
   }) : super(key: key);
   final Url;
@@ -45,10 +46,10 @@ class _ContractWidgetState extends State<ContractWidget>
     setState(() {
       sellerPhone = prefs.getString('phone');
       sellerName = prefs.getString('name');
-      sellerId =  prefs.getString('id');
-      if(widget.Url == ''){
+      sellerId = prefs.getString('id');
+      if (widget.Url == '') {
         url = 'https://www.linkpicture.com/q/dp_3.png';
-      }else{
+      } else {
         url = widget.Url;
       }
     });
@@ -247,8 +248,8 @@ class _ContractWidgetState extends State<ContractWidget>
   }
 
   void sellProduct() {
-    status = 'Requested';
-    if (images.isNotEmpty) {
+    status = 'Imetumwa';
+    var delivery = '-';
       adminServices.makeContract(
         context: context,
         name: productName.text,
@@ -264,13 +265,8 @@ class _ContractWidgetState extends State<ContractWidget>
         receiver: buyerName,
         buyerImage: buyerImage,
         sellerId: sellerId,
+        deliveryDate: delivery,
       );
-    } else {
-      showSnackBar(
-        context,
-        'Tafadhali weka picha ya bidhaa',
-      );
-    }
   }
 
   selectImages() async {
@@ -297,18 +293,17 @@ class _ContractWidgetState extends State<ContractWidget>
         context: context,
         onSuccess: () {
           var returnData = jsonDecode(res.body);
-          if(returnData.length > 0){
+          if (returnData.length > 0) {
             contractActivate = true;
-          }else{
+          } else {
             showSnackBar(context, 'Hakuna taarifa za mteja');
           }
 
           print(returnData);
           infoList = returnData;
-          setState((){
+          setState(() {
             infoSearch = true;
           });
-
         },
       );
     } catch (e) {
@@ -319,6 +314,7 @@ class _ContractWidgetState extends State<ContractWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         centerTitle: false,
         automaticallyImplyLeading: false,
@@ -398,28 +394,31 @@ class _ContractWidgetState extends State<ContractWidget>
                     padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                     child: TextFormField(
                       controller: productName,
-                      obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'enter name',
+                        hintStyle: FlutterFlowTheme.of(context)
+                            .bodyText2
+                            .override(
+                          fontFamily: 'Outfit',
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.grey,
+                            width: 2,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.white,
+                            width: 1.5,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        fillColor: Colors.transparent,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -488,25 +487,30 @@ class _ContractWidgetState extends State<ContractWidget>
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'enter specifications',
+                        hintStyle: FlutterFlowTheme.of(context)
+                            .bodyText2
+                            .override(
+                          fontFamily: 'Outfit',
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.grey,
+                            width: 2,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.white,
+                            width: 1.5,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        fillColor: Colors.transparent,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -553,25 +557,30 @@ class _ContractWidgetState extends State<ContractWidget>
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'enter price',
+                        hintStyle: FlutterFlowTheme.of(context)
+                            .bodyText2
+                            .override(
+                          fontFamily: 'Outfit',
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.grey,
+                            width: 2,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.white,
+                            width: 1.5,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        fillColor: Colors.transparent,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -617,25 +626,30 @@ class _ContractWidgetState extends State<ContractWidget>
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'enter location',
+                        hintStyle: FlutterFlowTheme.of(context)
+                            .bodyText2
+                            .override(
+                          fontFamily: 'Outfit',
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.grey,
+                            width: 2,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            width: 1,
+                            color: Colors.white,
+                            width: 1.5,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        fillColor: Colors.transparent,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -757,44 +771,49 @@ class _ContractWidgetState extends State<ContractWidget>
                         child: Padding(
                           padding:
                               EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: TextField(
-                                controller: buyerPhone,
-                                decoration: InputDecoration(
-                                  hintText: 'Ingiza namba ya mteja',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: TextField(
+                              controller: buyerPhone,
+                              decoration: InputDecoration(
+                                hintText: 'Ingiza namba ya mteja',
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .bodyText2
                                     .override(
-                                      fontFamily: 'Outfit',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                                keyboardType: TextInputType.text,
-                              ).animated([
-                                animationsMap['textFieldOnPageLoadAnimation3']!
-                              ]),
-                            ),
+                                  fontFamily: 'Outfit',
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                filled: true,
+                                fillColor: Colors.transparent,
+                              ),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              keyboardType: TextInputType.text,
+                            ).animated([
+                              animationsMap['textFieldOnPageLoadAnimation3']!
+                            ]),
+                          ),
                         ),
                       ),
                       Flexible(
@@ -802,19 +821,18 @@ class _ContractWidgetState extends State<ContractWidget>
                           padding: const EdgeInsets.only(
                               top: 20, bottom: 15, left: 0, right: 15),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 0.13,
-                            height: 55,
+                            width: 50,
+                            height: 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: ElevatedButton(
                               onPressed: () {
                                 fetchBuyer();
-
                               },
                               child: Icon(
                                 Icons.check,
-                                size: 30,
+                                size: 28,
                               ),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.lightGreen,
@@ -836,160 +854,188 @@ class _ContractWidgetState extends State<ContractWidget>
                       ),
                     ],
                   ),
-                  infoSearch == true && infoList.length > 0?Padding(
-                      padding: const EdgeInsets.only(
-                          top: 0, bottom: 15, left: 0, right: 10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 1,
-                            itemBuilder: (context, index) {
-                              buyerName = infoList[index]['name'];
-                              buyerImage = infoList[index]['images'].length > 0?
-                              infoList[index]['images'][0]:
-                              'https://www.linkpicture.com/q/dp_3.png';
-                          return Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 10, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 0, 0),
-                                      child: Text(
-                                        'Buyer\u0027s Information:',
-                                        textAlign: TextAlign.start,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              fontSize: 14,
+                  infoSearch == true && infoList.length > 0
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                              top: 0, bottom: 15, left: 0, right: 10),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  buyerName = infoList[index]['name'];
+                                  buyerImage = infoList[index]['images']
+                                              .length >
+                                          0
+                                      ? infoList[index]['images'][0]
+                                      : 'https://www.linkpicture.com/q/dp_3.png';
+
+                                  double avgRating = 0;
+                                  double myRating = 0;
+                                  double totalRating = 0;
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            5, 10, 0, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(15, 0, 0, 0),
+                                              child: Text(
+                                                'Buyer\u0027s Information:',
+                                                textAlign: TextAlign.start,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .subtitle2
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryColor,
+                                                          fontSize: 14,
+                                                        ),
+                                              ).animated([
+                                                animationsMap[
+                                                    'textOnPageLoadAnimation3']!
+                                              ]),
                                             ),
-                                      ).animated([
-                                        animationsMap[
-                                            'textOnPageLoadAnimation3']!
-                                      ]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 1, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 2, 0, 0),
-                                      child: infoList[index] == ''?Container():Text(
-                                       'Name: ' + infoList[index]['name'],
-                                        textAlign: TextAlign.start,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300,
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            5, 1, 0, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(15, 2, 0, 0),
+                                              child: infoList[index] == ''
+                                                  ? Container()
+                                                  : Text(
+                                                      'Name: ' +
+                                                          infoList[index]
+                                                              ['name'],
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Outfit',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                    ).animated([
+                                                      animationsMap[
+                                                          'textOnPageLoadAnimation3']!
+                                                    ]),
                                             ),
-                                      ).animated([animationsMap['textOnPageLoadAnimation3']!
-                                      ]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 2, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 0, 0),
-                                      child: Text(
-                                        'Phone number: ' + infoList[index]['phone'],
-                                        textAlign: TextAlign.start,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300,
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            5, 2, 0, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(15, 0, 0, 0),
+                                              child: Text(
+                                                'Phone number: ' +
+                                                    infoList[index]['phone'],
+                                                textAlign: TextAlign.start,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .subtitle2
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                              ).animated([
+                                                animationsMap[
+                                                    'textOnPageLoadAnimation3']!
+                                              ]),
                                             ),
-                                      ).animated([
-                                        animationsMap[
-                                            'textOnPageLoadAnimation3']!
-                                      ]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 2, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 0, 0),
-                                      child: Text(
-                                        'Rating: ',
-                                        textAlign: TextAlign.start,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300,
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            5, 2, 0, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(15, 0, 0, 0),
+                                              child: Text(
+                                                'Rating: ',
+                                                textAlign: TextAlign.start,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .subtitle2
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                              ).animated([
+                                                animationsMap[
+                                                    'textOnPageLoadAnimation3']!
+                                              ]),
                                             ),
-                                      ).animated([
-                                        animationsMap[
-                                            'textOnPageLoadAnimation3']!
-                                      ]),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        }),
-                      ),
-                    ):Container(),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                }),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(30, 20, 30, 10),
                 child: FFButtonWidget(
                   onPressed: () {
-                    contractActivate?sellProduct():Text('');
+                    contractActivate ? sellProduct() : Text('');
                   },
                   text: 'Create Contract',
                   options: FFButtonOptions(
                     width: double.infinity,
                     height: 45,
-                    color: contractActivate?Colors.lightGreen:CupertinoColors.systemGrey3,
+                    color: contractActivate
+                        ? Colors.lightGreen
+                        : Colors.grey,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Outfit',
                           color: Colors.white,

@@ -28,6 +28,7 @@ class sellerRequest {
     required String receiver,
     required String buyerImage,
     required String sellerId,
+    required String deliveryDate,
     required List<File> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -56,13 +57,13 @@ class sellerRequest {
         buyerImage: buyerImage,
         receiver: receiver,
         sellerId: sellerId,
+        deliveryDate: deliveryDate,
       );
 
       http.Response res = await http.post(
         Uri.parse('$uri/admin/add-product'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
         },
         body: product.toJson(),
       );
@@ -110,10 +111,11 @@ class sellerRequest {
           }
           print( jsonDecode(res.body));
         },
+
+
       );
     } catch (e) {
       showSnackBar(context, e.toString());
-      print(e.toString());
     }
     return productList;
   }

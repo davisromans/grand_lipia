@@ -111,7 +111,7 @@ class AuthService {
                         NavigationScreen()));
           }
           }else{
-            prefs.setString('rating', 'No ratings yet');
+            prefs.setString('rating', '5.0');
          Navigator.push(
               context,
               MaterialPageRoute(

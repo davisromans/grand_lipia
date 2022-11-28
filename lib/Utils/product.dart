@@ -17,6 +17,7 @@ class Product {
   final String buyerImage;
   final String receiver;
   final String sellerId;
+  final String deliveryDate;
   Product({
     required this.name,
     required this.description,
@@ -31,6 +32,7 @@ class Product {
     required this.buyerImage,
     required this.receiver,
     required this.sellerId,
+    required this.deliveryDate,
     this.id,
   });
 
@@ -50,6 +52,7 @@ class Product {
       'buyerImage': buyerImage,
       'receiver': receiver,
       'sellerId' : sellerId,
+      'deliveryDate' : deliveryDate,
     };
   }
 
@@ -69,6 +72,7 @@ class Product {
       price: map['price']?.toDouble() ?? 0.0,
       id: map['_id'],
       sellerId: map['sellerId'] ?? '',
+      deliveryDate: map['deliveryDate'] ?? '',
     );
   }
 

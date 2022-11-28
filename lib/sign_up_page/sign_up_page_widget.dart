@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:test_app/Utils/utils.dart';
 import 'package:test_app/index.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../home_page/home_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 
@@ -56,73 +52,49 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      appBar: AppBar(
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        leading: new IconButton(
+          icon: new Icon(
+            Icons.arrow_back_ios_outlined,
+            color: Colors.white,
+            size: 20,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleSpacing: -10,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+          child: Text(
+            'Jisajili sasa',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+              fontFamily: 'Outfit',
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        toolbarHeight: 42,
+      ),
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              'assets/images/senero.jpg',
-                              width: 60,
-                              height: 60,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Text(
-                            'Senero',
-                            style: FlutterFlowTheme.of(context).title1.override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 70,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      'Jisajili sasa',
-                      style: FlutterFlowTheme.of(context).title1.override(
-                            fontFamily: 'Outfit',
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                      child: Text(
-                        'Jaza fomu iliopo chini kujisajili.',
-                        style: FlutterFlowTheme.of(context).bodyText2.override(
-                              fontFamily: 'Outfit',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +102,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                           Expanded(
                             child: Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                                  EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                               child: TextFormField(
                                 controller: userName,
                                 obscureText: false,
@@ -148,36 +120,35 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       .bodyText2
                                       .override(
                                         fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
+                                        color: Colors.grey,
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal,
                                       ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
+                                      color: Colors.grey,
                                       width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
-                                      width: 2,
+                                      color: Colors.white,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: Colors.transparent,
                                   contentPadding:
                                       EdgeInsetsDirectional.fromSTEB(
-                                          16, 24, 0, 24),
+                                          16, 5, 0, 5),
                                 ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -213,37 +184,36 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                   hintStyle: FlutterFlowTheme.of(context)
                                       .bodyText2
                                       .override(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                    fontFamily: 'Outfit',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
+                                      color: Colors.grey,
                                       width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
-                                      width: 2,
+                                      color: Colors.white,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: Colors.transparent,
                                   contentPadding:
                                       EdgeInsetsDirectional.fromSTEB(
-                                          16, 24, 0, 24),
+                                          16, 5, 0, 5),
                                 ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -267,6 +237,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                               child: TextFormField(
                                 controller: password,
                                 obscureText: !passwordVisibility,
+
                                 decoration: InputDecoration(
                                   labelStyle: FlutterFlowTheme.of(context)
                                       .bodyText2
@@ -281,29 +252,29 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       .bodyText2
                                       .override(
                                     fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
+                                    color: Colors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
+                                      color: Colors.grey,
                                       width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
-                                      width: 2,
+                                      color: Colors.white,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: Colors.transparent,
                                   contentPadding:
                                   EdgeInsetsDirectional.fromSTEB(
-                                      16, 24, 24, 24),
+                                      16, 5, 24, 5),
                                   suffixIcon: InkWell(
                                     onTap: () => setState(
                                           () => passwordVisibility =
@@ -314,7 +285,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       passwordVisibility
                                           ? Icons.visibility_outlined
                                           : Icons.visibility_off_outlined,
-                                      color: Color(0xFF57636C),
+                                      color: Colors.grey,
                                       size: 22,
                                     ),
                                   ),
@@ -323,7 +294,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                     .bodyText1
                                     .override(
                                   fontFamily: 'Outfit',
-                                  color: Color(0xFF0F1113),
+                                  color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
                                 ),
@@ -360,30 +331,30 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                   hintStyle: FlutterFlowTheme.of(context)
                                       .bodyText2
                                       .override(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                    fontFamily: 'Outfit',
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
+                                      color: Colors.grey,
                                       width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xFFF1F4F8),
-                                      width: 2,
+                                      color: Colors.white,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: Colors.transparent,
                                   contentPadding:
                                       EdgeInsetsDirectional.fromSTEB(
-                                          16, 24, 24, 24),
+                                          16, 5, 24, 5),
                                   suffixIcon: InkWell(
                                     onTap: () => setState(
                                       () => passwordVisibility =
@@ -394,7 +365,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                       passwordVisibility
                                           ? Icons.visibility_outlined
                                           : Icons.visibility_off_outlined,
-                                      color: Color(0xFF57636C),
+                                      color: Colors.grey,
                                       size: 22,
                                     ),
                                   ),
@@ -403,7 +374,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: Color(0xFF0F1113),
+                                      color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -415,92 +386,34 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          FFButtonWidget(
-                            onPressed: ()  {
-                              signUpUser();
-                            },
-                            text: 'Tengeneza akaunti',
-                            options: FFButtonOptions(
-                              width: 190,
-                              height: 50,
-                              color:
-                                  FlutterFlowTheme.of(context).secondaryColor,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .subtitle1
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 3,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            signUpUser();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Jisajili',
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 24),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Tayari una akaunti?',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyText1
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                PageTransition(
-                                  type: PageTransitionType.fade,
-                                  duration: Duration(milliseconds: 0),
-                                  reverseDuration: Duration(milliseconds: 0),
-                                  child: LoginPageWidget(),
-                                ),
-                              );
-                            },
-                            text: 'Ingia',
-                            options: FFButtonOptions(
-                              width: 90,
-                              height: 30,
-                              color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .subtitle2
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                              elevation: 0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: FlutterFlowTheme.of(context).tertiaryColor,
+                            onPrimary: Colors.white,
+                            textStyle:
+                            FlutterFlowTheme.of(context).title1.override(
+                              fontFamily: 'Ubuntu',
+                              color: Colors.black,
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
                             ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -509,7 +422,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
             ],
           ),
         ),
-      ),
     );
   }
 }
