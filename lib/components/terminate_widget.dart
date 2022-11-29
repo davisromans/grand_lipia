@@ -21,6 +21,7 @@ class TerminateWidget extends StatefulWidget {
     this.amount,
     this.imageSeller,
     this.imageBuyer,
+    this.terminate
   }) : super(key: key);
   final id;
   final buyer;
@@ -30,6 +31,7 @@ class TerminateWidget extends StatefulWidget {
   final amount;
   final imageSeller;
   final imageBuyer;
+  final terminate;
 
   @override
   _TerminateWidgetState createState() => _TerminateWidgetState();
@@ -470,8 +472,8 @@ class _TerminateWidgetState extends State<TerminateWidget>
                         itemBuilder: (context, index) {
                           return ElevatedButton(
                             onPressed: () {
-                              history();
-                             deleteProduct();
+                              widget.terminate == 'Active'?history():GestureDetector();
+                              widget.terminate == 'Active'?deleteProduct():GestureDetector();
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
@@ -480,7 +482,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
-                              primary:  Colors.lightGreen,
+                              primary:  widget.terminate == 'Active'?Colors.lightGreen:Colors.grey,
                               onPrimary: Colors.black,
                               textStyle: FlutterFlowTheme.of(context)
                                   .title1

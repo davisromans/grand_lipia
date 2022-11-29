@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:test_app/login_page/login_page_widget.dart';
 import 'package:test_app/screen_navigation_widget.dart';
 import 'Utils/user_provider.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
@@ -75,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       )
-          : NavigationScreen(),
+          : LoginPageWidget(),
     );
   }
 }

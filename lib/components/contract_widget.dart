@@ -250,6 +250,7 @@ class _ContractWidgetState extends State<ContractWidget>
   void sellProduct() {
     status = 'Imetumwa';
     var delivery = '-';
+    var terminate = '-';
       adminServices.makeContract(
         context: context,
         name: productName.text,
@@ -266,6 +267,7 @@ class _ContractWidgetState extends State<ContractWidget>
         buyerImage: buyerImage,
         sellerId: sellerId,
         deliveryDate: delivery,
+        terminate: terminate,
       );
   }
 
@@ -406,19 +408,20 @@ class _ContractWidgetState extends State<ContractWidget>
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.grey,
-                            width: 2,
+                            width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.white,
-                            width: 1.5,
+                            width: 2,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
                         fillColor: Colors.transparent,
+                          contentPadding: EdgeInsets.all(15)
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -429,35 +432,11 @@ class _ContractWidgetState extends State<ContractWidget>
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                ),
-              ),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(15, 15, 0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -498,19 +477,20 @@ class _ContractWidgetState extends State<ContractWidget>
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.grey,
-                            width: 2,
+                            width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.white,
-                            width: 1.5,
+                            width: 2,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
                         fillColor: Colors.transparent,
+                          contentPadding: EdgeInsets.all(15)
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -568,19 +548,20 @@ class _ContractWidgetState extends State<ContractWidget>
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.grey,
-                            width: 2,
+                            width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.white,
-                            width: 1.5,
+                            width: 2,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
                         fillColor: Colors.transparent,
+                          contentPadding: EdgeInsets.all(15)
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -637,19 +618,20 @@ class _ContractWidgetState extends State<ContractWidget>
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.grey,
-                            width: 2,
+                            width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.white,
-                            width: 1.5,
+                            width: 2,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         filled: true,
                         fillColor: Colors.transparent,
+                          contentPadding: EdgeInsets.all(15)
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -688,7 +670,7 @@ class _ContractWidgetState extends State<ContractWidget>
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(30, 10, 30, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 0),
                     child: images.isNotEmpty
                         ? CarouselSlider(
                             items: images.map(
@@ -714,6 +696,7 @@ class _ContractWidgetState extends State<ContractWidget>
                               radius: const Radius.circular(10),
                               dashPattern: const [10, 4],
                               strokeCap: StrokeCap.round,
+                              color: Colors.grey,
                               child: Container(
                                 width: double.infinity,
                                 height: 150,
@@ -767,12 +750,11 @@ class _ContractWidgetState extends State<ContractWidget>
                   ),
                   Row(
                     children: [
-                      Flexible(
-                        child: Padding(
+                      Padding(
                           padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+                              EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                           child: Container(
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(context).size.width*0.76,
                             child: TextField(
                               controller: buyerPhone,
                               decoration: InputDecoration(
@@ -801,6 +783,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                 ),
                                 filled: true,
                                 fillColor: Colors.transparent,
+                                contentPadding: EdgeInsets.all(15)
                               ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyText1
@@ -815,14 +798,13 @@ class _ContractWidgetState extends State<ContractWidget>
                             ]),
                           ),
                         ),
-                      ),
-                      Flexible(
-                        child: Padding(
+                     SizedBox(width: 5,),
+                     Padding(
                           padding: const EdgeInsets.only(
-                              top: 20, bottom: 15, left: 0, right: 15),
+                              top: 15, bottom: 15, left: 0, right: 15),
                           child: Container(
-                            width: 50,
-                            height: 50,
+                            width: 48,
+                            height: 48,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -832,11 +814,13 @@ class _ContractWidgetState extends State<ContractWidget>
                               },
                               child: Icon(
                                 Icons.check,
-                                size: 28,
+                                size: 30,
+
                               ),
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.lightGreen,
-                                onPrimary: Colors.black,
+                                primary: FlutterFlowTheme.of(context).tertiaryColor,
+                                onPrimary: Colors.white,
+                                padding: EdgeInsets.zero,
                                 textStyle: FlutterFlowTheme.of(context)
                                     .title1
                                     .override(
@@ -846,12 +830,11 @@ class _ContractWidgetState extends State<ContractWidget>
                                       fontWeight: FontWeight.w500,
                                     ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
+                                    borderRadius: BorderRadius.circular(5)),
                               ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   infoSearch == true && infoList.length > 0
@@ -1024,29 +1007,35 @@ class _ContractWidgetState extends State<ContractWidget>
                 ],
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(30, 20, 30, 10),
-                child: FFButtonWidget(
-                  onPressed: () {
-                    contractActivate ? sellProduct() : Text('');
-                  },
-                  text: 'Create Contract',
-                  options: FFButtonOptions(
-                    width: double.infinity,
-                    height: 45,
-                    color: contractActivate
-                        ? Colors.lightGreen
-                        : Colors.grey,
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                          fontFamily: 'Outfit',
-                          color: Colors.white,
-                        ),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
+                padding: const EdgeInsets.fromLTRB(25, 30,25, 15),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      contractActivate ? sellProduct() : Text('');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'Ingia',
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      primary:  contractActivate
+                          ? FlutterFlowTheme.of(context).tertiaryColor: Colors.grey,
+                      onPrimary: Colors.white,
+                      textStyle:
+                      FlutterFlowTheme.of(context).title1.override(
+                        fontFamily: 'Ubuntu',
+                        fontSize: 21,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
                   ),
-                ).animated([animationsMap['buttonOnPageLoadAnimation']!]),
+                ),
               ),
             ],
           ),

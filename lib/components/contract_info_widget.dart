@@ -33,6 +33,7 @@ class ContractInfoWidget extends StatefulWidget {
         this.buyerImage,
         this.receiver,
         this.sellerId,
+        this.terminate,
       this.Buyer})
       : super(
           key: key,
@@ -51,6 +52,7 @@ class ContractInfoWidget extends StatefulWidget {
   final Status;
   final receiver;
   final sellerId;
+  final terminate;
 
   @override
   _ContractInfoWidgetState createState() => _ContractInfoWidgetState();
@@ -84,6 +86,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var _setTime;
   var _hour, _minute, _time;
   var dateTime;
+  var terminateTime;
+
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   var deliveryDate;
   fetchAllProducts() async {
@@ -299,6 +303,31 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     }
   }
 
+  delayTimer() async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/terminate-timer'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'id': id,
+          'timer': terminateTime,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Terminate time set');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   Future<void> userRating() async {
     print(_ratingValue);
     try {
@@ -344,6 +373,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         response: res,
         context: context,
         onSuccess: () {
+          delayTimer();
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -1172,8 +1202,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                                   amount: productPrice.text,
                                                   imageSeller:dpBuyer,
                                                   imageBuyer:dpSeller,
+                                                  terminate: widget.terminate,
                                                 )));
-                                    ;
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),
@@ -1350,6 +1380,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   }
 
    _selectDate(BuildContext context) async {
+
      DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -1360,10 +1391,12 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       setState(() {
         selectedDate = picked;
         _dateController.text = DateFormat.yMd().format(selectedDate);
+        print(selectedDate);
       });
   }
 
  _selectTime(BuildContext context) async {
+    var setTime;
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -1379,7 +1412,15 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, am]).toString();
         deliveryDate = '${_timeController.text} ' + '${_dateController.text}';
-        print(deliveryDate);
-      });
+
+        final today = selectedDate;
+        final getHour = today.add( Duration(hours: selectedTime.hour));
+        DateTime setTime = getHour.add( Duration(minutes: selectedTime.minute));
+        print(setTime.microsecondsSinceEpoch);
+        terminateTime = setTime.toString();
+        print(terminateTime);
+      }
+      );
+
   }
 }

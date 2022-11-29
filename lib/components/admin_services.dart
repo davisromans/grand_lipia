@@ -29,6 +29,7 @@ class sellerRequest {
     required String buyerImage,
     required String sellerId,
     required String deliveryDate,
+    required String terminate,
     required List<File> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -58,6 +59,7 @@ class sellerRequest {
         receiver: receiver,
         sellerId: sellerId,
         deliveryDate: deliveryDate,
+        terminate: terminate,
       );
 
       http.Response res = await http.post(

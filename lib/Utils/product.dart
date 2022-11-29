@@ -18,6 +18,7 @@ class Product {
   final String receiver;
   final String sellerId;
   final String deliveryDate;
+  final String terminate;
   Product({
     required this.name,
     required this.description,
@@ -33,6 +34,7 @@ class Product {
     required this.receiver,
     required this.sellerId,
     required this.deliveryDate,
+    required this.terminate,
     this.id,
   });
 
@@ -53,6 +55,7 @@ class Product {
       'receiver': receiver,
       'sellerId' : sellerId,
       'deliveryDate' : deliveryDate,
+      'terminate' : terminate,
     };
   }
 
@@ -72,6 +75,7 @@ class Product {
       price: map['price']?.toDouble() ?? 0.0,
       id: map['_id'],
       sellerId: map['sellerId'] ?? '',
+      terminate: map['terminate'] ?? '',
       deliveryDate: map['deliveryDate'] ?? '',
     );
   }
