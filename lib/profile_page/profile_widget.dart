@@ -287,7 +287,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
           var returnData = jsonDecode(res.body);
           print(returnData);
           prefs.setString('phone', returnData['phone']);
-          prefs.setString('dp', returnData['images'][0]);
+          if(returnData['images'].length > 0 ){
+            prefs.setString('dp', returnData['images'][0]);
+          }
           print(prefs.getString('phone'));
           showSnackBar(
             context,

@@ -19,6 +19,8 @@ class Product {
   final String sellerId;
   final String deliveryDate;
   final String terminate;
+  final String buyerRating;
+  final String sellerRating;
   Product({
     required this.name,
     required this.description,
@@ -35,6 +37,8 @@ class Product {
     required this.sellerId,
     required this.deliveryDate,
     required this.terminate,
+    required this.buyerRating,
+    required this.sellerRating,
     this.id,
   });
 
@@ -56,6 +60,8 @@ class Product {
       'sellerId' : sellerId,
       'deliveryDate' : deliveryDate,
       'terminate' : terminate,
+      'buyerRating' : buyerRating,
+      'sellerRating' : sellerRating,
     };
   }
 
@@ -77,6 +83,8 @@ class Product {
       sellerId: map['sellerId'] ?? '',
       terminate: map['terminate'] ?? '',
       deliveryDate: map['deliveryDate'] ?? '',
+      buyerRating: map['buyerRating'] ?? '',
+      sellerRating: map['sellerRating'] ?? '',
     );
   }
 

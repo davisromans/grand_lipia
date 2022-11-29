@@ -829,6 +829,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                               receiver: productData.receiver,
                                               sellerId: productData.sellerId,
                                               terminate: productData.terminate,
+                                              buyerRating: productData.buyerRating,
+                                              sellerRating: productData.sellerRating,
                                             )));
                                   },
                                   child: Container(

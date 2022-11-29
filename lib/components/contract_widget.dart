@@ -41,12 +41,17 @@ class _ContractWidgetState extends State<ContractWidget>
   bool contractActivate = false;
   var buyerName;
   var url;
+  var buyerRating;
+  var sellerRating;
+
   getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       sellerPhone = prefs.getString('phone');
       sellerName = prefs.getString('name');
       sellerId = prefs.getString('id');
+      sellerRating = prefs.getString('rating');
+
       if (widget.Url == '') {
         url = 'https://www.linkpicture.com/q/dp_3.png';
       } else {
@@ -268,6 +273,8 @@ class _ContractWidgetState extends State<ContractWidget>
         sellerId: sellerId,
         deliveryDate: delivery,
         terminate: terminate,
+        buyerRating: buyerRating.toString(),
+        sellerRating: sellerRating.toString(),
       );
   }
 
@@ -280,7 +287,6 @@ class _ContractWidgetState extends State<ContractWidget>
 
   fetchBuyer() async {
     try {
-      print(buyerPhone.text);
       http.Response res = await http.post(
         Uri.parse('$uri/'),
         headers: <String, String>{
@@ -295,12 +301,31 @@ class _ContractWidgetState extends State<ContractWidget>
         context: context,
         onSuccess: () {
           var returnData = jsonDecode(res.body);
+          print(returnData);
+          var ratings = returnData[0]['ratings'];
+
+          print(ratings);
           if (returnData.length > 0) {
             contractActivate = true;
           } else {
             showSnackBar(context, 'Hakuna taarifa za mteja');
           }
 
+          double avgRating = 0;
+          double totalRating = 0;
+          if( ratings.length > 0){
+            for (int i = 0; i < ratings.length; i++) {
+              totalRating +=ratings[i]['rating'];
+            }
+
+            if (totalRating != 0) {
+              avgRating = totalRating / ratings.length;
+              buyerRating = avgRating;
+            }
+
+          }else{
+            buyerRating = '5.0 / 5.0';
+          }
           print(returnData);
           infoList = returnData;
           setState(() {
@@ -976,7 +1001,9 @@ class _ContractWidgetState extends State<ContractWidget>
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(15, 0, 0, 0),
                                               child: Text(
-                                                'Rating: ',
+                                                buyerRating != '5.0 / 5.0'
+                                                ?'Rating: ' + buyerRating.toString() + ' / 5.0'
+                                                :'5.0 / 5.0',
                                                 textAlign: TextAlign.start,
                                                 style:
                                                     FlutterFlowTheme.of(context)
@@ -1017,7 +1044,7 @@ class _ContractWidgetState extends State<ContractWidget>
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
-                        'Ingia',
+                        'Tuma mkataba',
                       ),
                     ),
                     style: ElevatedButton.styleFrom(

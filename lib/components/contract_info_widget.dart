@@ -34,6 +34,8 @@ class ContractInfoWidget extends StatefulWidget {
         this.receiver,
         this.sellerId,
         this.terminate,
+        this.buyerRating,
+        this.sellerRating,
       this.Buyer})
       : super(
           key: key,
@@ -53,6 +55,8 @@ class ContractInfoWidget extends StatefulWidget {
   final receiver;
   final sellerId;
   final terminate;
+  final buyerRating;
+  final sellerRating;
 
   @override
   _ContractInfoWidgetState createState() => _ContractInfoWidgetState();
@@ -87,6 +91,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var _hour, _minute, _time;
   var dateTime;
   var terminateTime;
+  var buyerRating;
+  var sellerRating;
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   var deliveryDate;
@@ -320,7 +326,11 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         response: res,
         context: context,
         onSuccess: () {
-          showSnackBar(context, 'Terminate time set');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NavigationScreen()));
+          showSnackBar(context, 'Sasa unaweza kusitisha mkataba');
         },
       );
     } catch (e) {
@@ -427,9 +437,34 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       dpSeller = widget.buyerImage;
       status = widget.Status;
       receiver = widget.receiver;
+      buyerRating = widget.buyerRating;
+      sellerRating = widget.sellerRating;
     });
     fetchAllProducts();
+
+    if(isSeller == false){
+      if(buyerRating.length>15){
+        buyerRating = buyerRating.substring(0, 3);
+      }
+
+      if(buyerRating == '5.0 / 5.0'){
+      }else{
+        _ratingValue = double.parse(buyerRating);
+      }
+    } else {
+      if(sellerRating.length>15){
+        sellerRating = sellerRating.substring(0, 3);
+      }
+
+      if(sellerRating == '5.0 / 5.0'){
+      }else{
+        _ratingValue = double.parse(sellerRating);
+      }
+    }
+
   }
+
+
 
   double? _ratingValue;
 
@@ -552,7 +587,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   15, 4, 0, 0),
                                           child: RatingBar(
-                                              initialRating: 0,
+                                              initialRating: isSeller?double.parse(sellerRating):double.parse(buyerRating),
                                               ignoreGestures: true,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
@@ -582,10 +617,18 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   6, 6, 0, 0),
-                                          child: Text(
-                                            _ratingValue != null
-                                                ? _ratingValue.toString()
-                                                : 'No rating yet!',
+                                          child: isSeller?Text(
+                                            _ratingValue == '5.0 / 5.0'
+                                              ? '5.0 / 5.0'
+                                                : '$sellerRating' + ' / 5.0',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ):
+                                          Text(
+                                            _ratingValue == '5.0 / 5.0'
+                                                ? '5.0 / 5.0'
+                                                : '$buyerRating' + ' / 5.0',
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16),
@@ -910,7 +953,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                     ),
                 ],
               ),
-              status == 'Imetumwa'?Padding(
+              isSeller?Padding(
                 padding: const EdgeInsets.fromLTRB(30,15,30, 15),
                 child: Row(
                   children: [

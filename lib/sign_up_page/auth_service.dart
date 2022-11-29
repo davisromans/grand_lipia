@@ -93,7 +93,6 @@ class AuthService {
              prefs.setString('dp', '');
            }
           double avgRating = 0;
-          double myRating = 0;
           double totalRating = 0;
 
           if( returnData['ratings'].length > 0){
