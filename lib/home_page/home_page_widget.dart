@@ -4,6 +4,7 @@ import 'package:test_app/chat_page/chat_page_widget.dart';
 import 'package:test_app/components/contract_info_widget.dart';
 import 'package:test_app/profile_page/profile_widget.dart';
 import 'package:test_app/transaction_page/transaction_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Utils/product.dart';
 import '../Utils/user_provider.dart';
 import '../components/admin_services.dart';
@@ -24,188 +25,6 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStateMixin {
   List<Product>? products;
   final sellerRequest adminServices = sellerRequest();
-  final animationsMap = {
-    'circleImageOnPageLoadAnimation': AnimationInfo(
-      curve: Curves.linear,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'textOnPageLoadAnimation1': AnimationInfo(
-      curve: Curves.linear,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'textOnPageLoadAnimation2': AnimationInfo(
-      curve: Curves.linear,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'buttonOnPageLoadAnimation': AnimationInfo(
-      curve: Curves.linear,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'textOnPageLoadAnimation3': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, -100),
-        scale: 0,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation1': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(100, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'textOnPageLoadAnimation4': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(0, -100),
-        scale: 0,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(-100, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation3': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(-100, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'containerOnPageLoadAnimation4': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-      hideBeforeAnimating: true,
-      fadeIn: true,
-      initialState: AnimationState(
-        offset: Offset(-100, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-    'textOnActionTriggerAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onActionTrigger,
-      duration: 600,
-      hideBeforeAnimating: true,
-      initialState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        offset: Offset(0, 0),
-        scale: 1,
-        opacity: 1,
-      ),
-    ),
-  };
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   double _ratingValue = 0;
   int _curIndex = 0;
   var username;
@@ -236,16 +55,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
   void initState() {
     super.initState();
     getUser();
-    startPageLoadAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onPageLoad),
-      this,
-    );
-    setupTriggerAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onActionTrigger),
-      this,
-    );
     fetchAllProducts();
   }
 
@@ -262,71 +71,27 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     return 'Morning';
   }
 
+  _launchURL() async {
+    const url = 'https://api.whatsapp.com/qr/GGJCIF63U6ZSJ1?autoload=1&app_absent=0';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      // appBar: AppBar(
-      //   centerTitle: false,
-      //   automaticallyImplyLeading: false,
-      //   title: Text(salutation),
-      //   backgroundColor: Colors.transparent,
-      //   bottomOpacity: 0.0,
-      //   elevation: 0.0,
-      //   actions: [
-      //     PopupMenuButton(
-      //         // add icon, by default "3 dot" icon
-      //         // icon: Icon(Icons.book)
-      //         itemBuilder: (context) {
-      //       return [
-      //         PopupMenuItem<int>(
-      //           value: 0,
-      //           child: Text("Profile"),
-      //         ),
-      //         PopupMenuItem<int>(
-      //           value: 1,
-      //           child: Text("Transactions"),
-      //         ),
-      //         PopupMenuItem<int>(
-      //           value: 2,
-      //           child: Text("Log out"),
-      //         ),
-      //       ];
-      //     }, onSelected: (value) {
-      //       if (value == 0) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => const ProfileWidget()),
-      //         );
-      //       } else if (value == 1) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (context) => const TransactionWidget()),
-      //         );
-      //       } else if (value == 2) {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (context) => const LoginPageWidget()),
-      //         );
-      //       }
-      //     }),
-      //   ],
-      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF2A2929),
-        splashColor: Color(0xFFFF5E01),
+        splashColor:Colors.white,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ChatPageWidget()));
+         _launchURL();
         },
-        child: const Icon(Icons.chat, color: Color(0xFFFF5E01)),
-      ).animated([animationsMap['containerOnPageLoadAnimation1']!]),
+        child: const Icon(Icons.chat, color: Colors.white),
+      ),
       //BUTTON LOCATION
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
@@ -361,8 +126,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Container(
-                                          width: 60,
-                                          height: 60,
+                                          width: 55,
+                                          height: 55,
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: Colors.white,
@@ -438,18 +203,15 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                               RatingWidget(
                                                                   full: const Icon(
                                                                       Icons.star,
-                                                                      color: Color(
-                                                                          0xFFFF5E01)),
+                                                                      color: Colors.white),
                                                                   half: const Icon(
                                                                     Icons.star_half,
-                                                                    color: Color(
-                                                                        0xFFFF5E01),
+                                                                    color: Colors.white,
                                                                   ),
                                                                   empty: const Icon(
                                                                     Icons
                                                                         .star_outline,
-                                                                    color: Color(
-                                                                        0xFFFF5E01),
+                                                                    color:Colors.white
                                                                   )),
                                                           onRatingUpdate: (value) {}),
                                                     ),
@@ -472,8 +234,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                       ],
                                     ),
                                   ),
-                                ).animated(
-                                    [animationsMap['textOnPageLoadAnimation3']!]),
+                                ),
                               ),
                               // Ads Container // Ads Container // Ads Container
                               Padding(
@@ -501,8 +262,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Container(
-                                          width: 60,
-                                          height: 60,
+                                          width: 55,
+                                          height: 55,
                                           decoration: BoxDecoration(
                                             color: Color(0xFFEEEEEE),
                                             image: DecorationImage(
@@ -526,7 +287,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                     EdgeInsetsDirectional.fromSTEB(
                                                         15, 0, 0, 0),
                                                 child: Text(
-                                                  'Gain Trust',
+                                                  'Jenga uaminifu',
                                                   textAlign: TextAlign.start,
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -548,7 +309,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                       padding: EdgeInsetsDirectional
                                                           .fromSTEB(15, 4, 0, 0),
                                                       child: Text(
-                                                        'Get star ratings when you complete\na contract to gain more trust ',
+                                                        'Pata kila nyota kila unapokamilisha\n biashara ili uaminike zaidi',
                                                         textAlign: TextAlign.start,
                                                         style: FlutterFlowTheme.of(
                                                                 context)
@@ -573,40 +334,9 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                       ],
                                     ),
                                   ),
-                                ).animated([
-                                  animationsMap['containerOnPageLoadAnimation1']!
-                                ]),
-                              ),
-                              // Contract  // Contract
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          20, 0, 0, 3),
-                                      child: Text(
-                                        'Initiate Contract',
-                                        textAlign: TextAlign.center,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color: FlutterFlowTheme.of(context)
-                                                  .primaryText,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ).animated([
-                                        animationsMap['textOnPageLoadAnimation4']!
-                                      ]),
-                                    ),
-                                  ],
                                 ),
                               ),
+                              // Contract  // Contract
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             10, 8, 10, 0),
@@ -646,8 +376,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                   mainAxisSize: MainAxisSize.max,
                                                   children: [
                                                     Container(
-                                                      width: 60,
-                                                      height: 60,
+                                                      width: 55,
+                                                      height: 55,
                                                       decoration: BoxDecoration(
                                                         border: Border.all(
                                                           color: Colors.white,
@@ -660,11 +390,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                             blurRadius: 5,
                                                           ),
                                                         ],
+                                                        
                                                         color: Color(0xFFEEEEEE),
                                                         image: DecorationImage(
                                                           fit: BoxFit.cover,
                                                           image: Image.asset(
-                                                            'assets/images/senero.jpg',
+                                                            'assets/images/lipia.png',
                                                           ).image,
                                                         ),
                                                         shape: BoxShape.circle,
@@ -690,7 +421,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                             0,
                                                                             0),
                                                                 child: Text(
-                                                                  'Create a contract',
+                                                                  'Tengeneza mkataba',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .start,
@@ -720,7 +451,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                                             0,
                                                                             0),
                                                                   child: Text(
-                                                                    'Is there a product that you wish to Sell?',
+                                                                    'NI muhimu kuilinda pesa yako',
 
                                                                     textAlign: TextAlign.start,
                                                                     style: FlutterFlowTheme
@@ -756,10 +487,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                   ],
                                                 ),
                                               )),
-                                        ).animated([
-                                          animationsMap[
-                                              'containerOnPageLoadAnimation1']!
-                                        ]),
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
@@ -773,7 +501,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                   EdgeInsetsDirectional.fromSTEB(
                                                       20, 0, 0, 3),
                                               child: Text(
-                                                'My Contract',
+                                                'Mikataba yangu',
                                                 textAlign: TextAlign.center,
                                                 style: FlutterFlowTheme.of(context)
                                                     .bodyText2
@@ -785,10 +513,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.normal,
                                                     ),
-                                              ).animated([
-                                                animationsMap[
-                                                    'textOnPageLoadAnimation4']!
-                                              ]),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -860,8 +585,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                           MainAxisSize.max,
                                           children: [
                                             Container(
-                                              width: 60,
-                                              height: 60,
+                                              width: 55,
+                                              height: 55,
                                               decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: Colors.white,
@@ -992,10 +717,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                           ]),
                                     ),
                                   ),
-                                ).animated([
-                                  animationsMap[
-                                  'containerOnPageLoadAnimation1']!
-                                ]),
+                                ),
                               ):Text('');},
                           ),
                       ],

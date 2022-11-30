@@ -201,7 +201,7 @@ class _TransactionWidgetState extends State<TransactionWidget>
   List historyList = [];
   var userPhone;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final third = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -259,7 +259,7 @@ class _TransactionWidgetState extends State<TransactionWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
+        key: third,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
           centerTitle: false,

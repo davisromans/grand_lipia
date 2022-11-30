@@ -598,14 +598,14 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                               glowRadius: 2,
                                               ratingWidget: RatingWidget(
                                                   full: const Icon(Icons.star,
-                                                      color:  Colors.lightGreen),
+                                                      color:  Colors.white),
                                                   half: const Icon(
                                                     Icons.star_half,
-                                                    color:  Colors.lightGreen,
+                                                    color:  Colors.white,
                                                   ),
                                                   empty: const Icon(
                                                     Icons.star_outline,
-                                                    color:  Colors.lightGreen,
+                                                    color:  Colors.white,
                                                   )),
                                               onRatingUpdate: (value) {
                                                 setState(() {
@@ -1145,7 +1145,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -1191,7 +1191,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.lightGreen,
+                                    primary:  FlutterFlowTheme.of(context)
+                                        .tertiaryColor,
                                     onPrimary: Colors.black,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
@@ -1203,7 +1204,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     ),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(15)),
+                                        BorderRadius.circular(5)),
                                   ),
                                 );
                               }),
@@ -1255,7 +1256,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary:  Colors.lightGreen,
+                                    primary:   FlutterFlowTheme.of(context).tertiaryColor,
                                     onPrimary: Colors.black,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
@@ -1267,7 +1268,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                         ),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(15)),
+                                            BorderRadius.circular(5)),
                                   ),
                                 );
                               }),
@@ -1322,21 +1323,21 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                               updateOnDrag: true,
                               glow: true,
                               glowColor:
-                              Colors.lightGreen,
+                              Colors.white,
                               glowRadius: 2,
                               ratingWidget:
                               RatingWidget(
                                   full: const Icon(
                                       Icons.star,
-                                      color: Colors.lightGreen),
+                                      color: Colors.white),
                                   half: const Icon(
                                     Icons.star_half,
-                                    color:  Colors.lightGreen
+                                    color:  Colors.white
                                   ),
                                   empty: const Icon(
                                     Icons
                                         .star_outline,
-                                    color:  Colors.lightGreen
+                                    color:  Colors.white
                                   )),
                               onRatingUpdate: (value) {
                                 setState(() {

@@ -10,8 +10,7 @@ import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import '../screen_navigation_widget.dart';
+import 'package:expandable/expandable.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({Key? key}) : super(key: key);
@@ -33,7 +32,6 @@ class _ProfileWidgetState extends State<ProfileWidget>
   var dpUrl;
   var getPassword;
   bool isDisabled = false;
-  bool activateButton = false;
   List<File> images = [];
   bool loadingValue = false;
 
@@ -287,14 +285,16 @@ class _ProfileWidgetState extends State<ProfileWidget>
           var returnData = jsonDecode(res.body);
           print(returnData);
           prefs.setString('phone', returnData['phone']);
-          if(returnData['images'].length > 0 ){
+          if (returnData['images'].length > 0) {
             prefs.setString('dp', returnData['images'][0]);
           }
           print(prefs.getString('phone'));
-          showSnackBar(
-            context,
-            'Umefanikiwa kubadili taarifa!',
-          );
+          // showSnackBar(
+          //   context,
+          //   'Umefanikiwa kubadili taarifa!',
+          // );
+          topBar(context, 'Hongera', 'Umefanikiwa kubadili taarifa');
+
         },
       );
     } catch (e) {
@@ -303,7 +303,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
     }
   }
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final second = GlobalKey<ScaffoldState>();
   double? _ratingValue;
 
   animations() {
@@ -349,431 +349,590 @@ class _ProfileWidgetState extends State<ProfileWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xFF181717),
-          toolbarHeight: 50,
-          title: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-            child: Text(
-              'Wasifu',
-              style: FlutterFlowTheme.of(context).bodyText2.override(
-                    fontFamily: 'Outfit',
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
+      key: second,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      appBar: AppBar(
+        centerTitle: false,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFF181717),
+        toolbarHeight: 50,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+          child: Text(
+            'Wasifu',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: 'Outfit',
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(
-              child: Stack(
-                children: [
-                  images.isNotEmpty
-                      ? CircleAvatar(
-                          radius: 110,
-                          backgroundImage: FileImage(images[0]),
-                        )
-                      : dpUrl != '' && dpUrl != null
-                          ? CircleAvatar(
-                              radius: 80,
-                              backgroundColor: Colors.white,
-                              backgroundImage: NetworkImage(dpUrl),
-                            )
-                          : CircleAvatar(
-                              radius: 90,
-                              backgroundColor: Colors.white,
-                              backgroundImage: NetworkImage(
-                                'https://www.linkpicture.com/q/dp_3.png',
+      ),
+      body: ExpandableTheme(
+        data: const ExpandableThemeData(
+          iconColor: Colors.white,
+          useInkWell: true,
+        ),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+
+                    child: Stack(
+                      children: [
+                        images.isNotEmpty
+                            ? CircleAvatar(
+                                radius: 90,
+                                backgroundImage: FileImage(images[0]),
+                              )
+                            : dpUrl != '' && dpUrl != null
+                                ? CircleAvatar(
+                                    radius: 90,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(dpUrl),
+                                  )
+                                : CircleAvatar(
+                                    radius: 90,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(
+                                      'https://www.linkpicture.com/q/dp_3.png',
+                                    ),
+                                  ),
+                        Positioned(
+                            right: -10,
+                            top: -10,
+                            child: IconButton(
+                              onPressed: () {
+                                selectImages();
+                              },
+                              icon: Icon(
+                                Icons.add_circle_outlined,
+                                size: 25,
+                                color: Colors.white,
                               ),
-                            ),
-                  Positioned(
-                      right: 10,
-                      top: 0,
-                      child: IconButton(
-                        onPressed: () {
-                          selectImages();
-                          activateButton = true;
-                        },
-                        icon: Icon(
-                          Icons.add_a_photo,
-                          size: 30,
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                        ),
-                      ))
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Container(
+                            ))
+                      ],
+                    ),
+                  ),
+            ],
+          ),
+        ),
+            ExpandableNotifier(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                color: Color(0xFF1A2023),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        child: SwitchListTile(
-                      activeColor: FlutterFlowTheme.of(context).tertiaryColor,
-                      value: isDisabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isDisabled = value;
-                          activateButton = value;
-                        });
-                      },
-                    )),
-                    Container(
-                      child: TextFormField(
-                        controller: usernameField,
-                        obscureText: false,
-                        enabled: isDisabled,
-                        decoration: InputDecoration(
-                          labelStyle:
-                              FlutterFlowTheme.of(context).bodyText2.override(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                          hintText: '$username',
-                          hintStyle:
-                              FlutterFlowTheme.of(context).bodyText2.override(
-                                    fontFamily: 'Outfit',
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          contentPadding:
-                              EdgeInsetsDirectional.fromSTEB(16, 5, 0, 5),
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child: ExpandablePanel(
+                        theme: const ExpandableThemeData(
+                          headerAlignment:
+                              ExpandablePanelHeaderAlignment.center,
+                          tapBodyToCollapse: true,
+
                         ),
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Outfit',
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
+                        header: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                            child: Text(
+                              "Jina la mtumiaji",
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            )),
+                        collapsed: Text(
+                          username == null?'':username,
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                            fontFamily: 'Outfit',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        expanded: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10, top: 10),
+                                child: Container(
+                                  child: TextFormField(
+                                    controller: usernameField,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      hintText: '$username',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.transparent,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              16, 5, 0, 5),
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        builder: (_, collapsed, expanded) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, bottom: 10),
+                            child: Expandable(
+                              collapsed: collapsed,
+                              expanded: expanded,
+                              theme:
+                                  const ExpandableThemeData(crossFadePoint: 0),
                             ),
+                          );
+                        },
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                              child: TextFormField(
-                                controller: phoneField,
-                                obscureText: false,
-                                enabled: isDisabled,
-                                decoration: InputDecoration(
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  hintText: '$productPhone',
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: Colors.grey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                  contentPadding:
-                                      EdgeInsetsDirectional.fromSTEB(
-                                          16, 5, 0, 5),
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                keyboardType: TextInputType.phone,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                              child: TextFormField(
-                                controller: passwordController,
-                                obscureText: !passwordVisibility,
-                                enabled: isDisabled,
-                                decoration: InputDecoration(
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  hintText: '........',
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: Colors.grey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                  contentPadding:
-                                      EdgeInsetsDirectional.fromSTEB(
-                                          16, 5, 24, 5),
-                                  suffixIcon: InkWell(
-                                    onTap: () => setState(
-                                      () => passwordVisibility =
-                                          !passwordVisibility,
-                                    ),
-                                    focusNode: FocusNode(skipTraversal: true),
-                                    child: Icon(
-                                      passwordVisibility
-                                          ? Icons.visibility_outlined
-                                          : Icons.visibility_off_outlined,
-                                      color: Color(0xFF57636C),
-                                      size: 22,
-                                    ),
-                                  ),
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                keyboardType: TextInputType.visiblePassword,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  updateInfo();
-                                },
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Vigezo na masharti',
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF1A2023),
-                                  onPrimary: Colors.white,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .title1
-                                      .override(
-                                        fontFamily: 'Ubuntu',
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 0, bottom: 15),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  updateInfo();
-                                },
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Ondoka',
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF1A2023),
-                                  onPrimary: Colors.white,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .title1
-                                      .override(
-                                        fontFamily: 'Ubuntu',
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  updateInfo();
-                                },
-                                child: Text(
-                                  'Badili taarifa',
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: activateButton
-                                      ? FlutterFlowTheme.of(context)
-                                          .tertiaryColor
-                                      : Colors.grey,
-                                  onPrimary: Colors.white,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .title1
-                                      .override(
-                                        fontFamily: 'Ubuntu',
-                                        color: Colors.black,
-                                        fontSize: 21,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
                     ),
                   ],
                 ),
               ),
+            )),
+            ExpandableNotifier(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                color: Color(0xFF1A2023),
+                child: Column(
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child: ExpandablePanel(
+                        theme: const ExpandableThemeData(
+                          headerAlignment:
+                              ExpandablePanelHeaderAlignment.center,
+                          tapBodyToCollapse: true,
+                        ),
+                        header: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                            child: Text(
+                              "Namba ya simu",
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                fontFamily: 'Outfit',
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )),
+                        collapsed: Text(
+                          productPhone == null?'':productPhone,
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                            fontFamily: 'Outfit',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        expanded: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10,  top: 10),
+                                child: Container(
+                                  child: TextFormField(
+                                    controller: phoneField,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      hintText: productPhone,
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.transparent,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              16, 5, 0, 5),
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        builder: (_, collapsed, expanded) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, bottom: 10),
+                            child: Expandable(
+                              collapsed: collapsed,
+                              expanded: expanded,
+                              theme:
+                                  const ExpandableThemeData(crossFadePoint: 0),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+            ExpandableNotifier(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                color: Color(0xFF1A2023),
+                child: Column(
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child: ExpandablePanel(
+                        theme: const ExpandableThemeData(
+                          headerAlignment:
+                              ExpandablePanelHeaderAlignment.center,
+                          tapBodyToCollapse: true,
+                        ),
+                        header: Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                            child: Text(
+                              "Neno siri",
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                fontFamily: 'Outfit',
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )),
+                        collapsed: Text(
+                          '................',
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                            fontFamily: 'Outfit',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        expanded: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10, top: 10),
+                                child: Container(
+                                  child: TextFormField(
+                                    controller: passwordController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      hintText: '............',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.grey,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.transparent,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              16, 5, 0, 5),
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        builder: (_, collapsed, expanded) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, bottom: 10),
+                            child: Expandable(
+                              collapsed: collapsed,
+                              expanded: expanded,
+                              theme:
+                                  const ExpandableThemeData(crossFadePoint: 0),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+            Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          updateInfo();
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Vigezo na masharti',
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF1A2023),
+                          onPrimary: Colors.white,
+                          textStyle:
+                              FlutterFlowTheme.of(context).title1.override(
+                                    fontFamily: 'Ubuntu',
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          ]).animated([animationsMap['textOnPageLoadAnimation2']!]),
-        ));
+            Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0, left: 15, right: 15, bottom: 15),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          updateInfo();
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Ondoka',
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF1A2023),
+                          onPrimary: Colors.white,
+                          textStyle:
+                              FlutterFlowTheme.of(context).title1.override(
+                                    fontFamily: 'Ubuntu',
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          updateInfo();
+                        },
+                        child: Text(
+                          'Badili taarifa',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: FlutterFlowTheme.of(context).tertiaryColor,
+                          onPrimary: Colors.white,
+                          textStyle:
+                              FlutterFlowTheme.of(context).title1.override(
+                                    fontFamily: 'Ubuntu',
+                                    color: Colors.black,
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

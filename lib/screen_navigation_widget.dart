@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:test_app/home_page/home_page_widget.dart';
 import 'package:test_app/profile_page/profile_widget.dart';
 import 'package:test_app/transaction_page/transaction_widget.dart';
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'flutter_flow/flutter_flow_theme.dart';
 
@@ -16,6 +18,8 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   int _index = 1;
+  final _pageController = PageController(initialPage: 1);
+  int maxCount = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +32,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           onTap: (int val) => setState(() => _index = val),
           currentIndex: _index,
+          fontSize: 1,
+          iconSize: 35,
           items: [
-            FloatingNavbarItem(icon: Icons.account_circle, title: 'Wasifu'),
-            FloatingNavbarItem(icon: Icons.home, title: 'Nyumbani'),
-            FloatingNavbarItem(icon: Icons.book, title: 'Miamala'),
+            FloatingNavbarItem(icon: Icons.account_circle, title: ''),
+            FloatingNavbarItem(icon: Icons.home, title: '',),
+            FloatingNavbarItem(icon: Icons.book, title: ''),
           ],
         ),
-    );
-  }
+
+    );}
 
   Widget _getWidget() {
     switch (_index) {
@@ -46,5 +52,19 @@ class _NavigationScreenState extends State<NavigationScreen> {
       default:
         return TransactionWidget();
     }
+  }
+
+  final List<Widget> bottomBarPages = [
+    const ProfileWidget(),
+    const HomePageWidget(),
+    const TransactionWidget(),
+    const HomePageWidget(),
+    const TransactionWidget(),
+  ];
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }
