@@ -174,7 +174,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
                                                     EdgeInsetsDirectional.fromSTEB(
                                                         15, 19, 0, 0),
                                                 child: Text(
-                                                  '$username',
+                                                  username != null?'$username':'',
                                                   textAlign: TextAlign.start,
                                                   style: FlutterFlowTheme.of(
                                                           context)

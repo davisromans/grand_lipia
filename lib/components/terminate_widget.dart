@@ -395,7 +395,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                         ),
                         filled: true,
                         fillColor:
-                        FlutterFlowTheme.of(context).secondaryBackground,
+                        Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                         fontFamily: 'Outfit',
@@ -441,7 +441,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                       width: double.infinity,
                       height: 300,
                       decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        color:  Color(0xFF1A2023),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: ClipRRect(

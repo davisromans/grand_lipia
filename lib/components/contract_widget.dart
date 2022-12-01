@@ -300,32 +300,34 @@ class _ContractWidgetState extends State<ContractWidget>
         response: res,
         context: context,
         onSuccess: () {
+          var ratings = [];
           var returnData = jsonDecode(res.body);
           print(returnData);
-          var ratings = returnData[0]['ratings'];
 
-          print(ratings);
+
           if (returnData.length > 0) {
+
             contractActivate = true;
+            ratings = returnData[0]['ratings'];
+            double avgRating = 0;
+            double totalRating = 0;
+            if( ratings.length > 0){
+              for (int i = 0; i < ratings.length; i++) {
+                totalRating +=ratings[i]['rating'];
+              }
+
+              if (totalRating != 0) {
+                avgRating = totalRating / ratings.length;
+                buyerRating = avgRating;
+              }
+
+            }else{
+              buyerRating = '5.0 / 5.0';
+            }
           } else {
-            showSnackBar(context, 'Hakuna taarifa za mteja');
+            showSnackBar(context,'Namba uliongiza haijasajiliwa');
           }
 
-          double avgRating = 0;
-          double totalRating = 0;
-          if( ratings.length > 0){
-            for (int i = 0; i < ratings.length; i++) {
-              totalRating +=ratings[i]['rating'];
-            }
-
-            if (totalRating != 0) {
-              avgRating = totalRating / ratings.length;
-              buyerRating = avgRating;
-            }
-
-          }else{
-            buyerRating = '5.0 / 5.0';
-          }
           print(returnData);
           infoList = returnData;
           setState(() {
@@ -334,7 +336,7 @@ class _ContractWidgetState extends State<ContractWidget>
         },
       );
     } catch (e) {
-      showSnackBar(context, e.toString());
+
     }
   }
 

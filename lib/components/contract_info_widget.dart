@@ -496,21 +496,24 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     fetchAllProducts();
 
     if(isSeller == false){
-      if(buyerRating.length>15){
+      if(buyerRating.length>3){
         buyerRating = buyerRating.substring(0, 3);
       }
-
       if(buyerRating == '5.0 / 5.0'){
       }else{
+        buyerRating == 5.0;
         _ratingValue = double.parse(buyerRating);
       }
+
+
     } else {
-      if(sellerRating.length>15){
+      if(sellerRating.length>3){
         sellerRating = sellerRating.substring(0, 3);
       }
 
       if(sellerRating == '5.0 / 5.0'){
       }else{
+        sellerRating == 5.0;
         _ratingValue = double.parse(sellerRating);
       }
     }
@@ -523,6 +526,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         centerTitle: false,
         automaticallyImplyLeading: false,
@@ -564,7 +568,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                   width: MediaQuery.of(context).size.width,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Color(0xFF272727),
+                    color:  Color(0xFF1A2023),
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
@@ -581,8 +585,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Container(
-                          width: 60,
-                          height: 60,
+                          width: 55,
+                          height: 55,
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.white,
@@ -748,7 +752,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         ),
                         filled: true,
                         fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -808,8 +812,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        fillColor: Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -870,7 +873,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         ),
                         filled: true,
                         fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -929,7 +932,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         ),
                         filled: true,
                         fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
+                        Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -994,7 +997,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                           ),
                           filled: true,
                           fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          Color(0xFF1A2023),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Outfit',
@@ -1206,7 +1209,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         height: 300,
                         decoration: BoxDecoration(
                           color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          Color(0xFF1A2023),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: ListView.builder(
@@ -1424,22 +1427,41 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                       ],
                     ),
                   ),
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          onPressed: () {
-                            userRating();
-                            history();
-                            deleteProduct();
-                            Navigator.pop(context);
-                          },
-                          child: Text('ok'),
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          height: MediaQuery.of(context).size.height * 0.12,
+                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('cancel'),
+                            ),
+                          )
+                      ),
+                      Container(
+                          height: MediaQuery.of(context).size.height * 0.12,
+                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
+                              onPressed: () {
+                                userRating();
+                                history();
+                                deleteProduct();
+                                Navigator.pop(context);
+                              },
+                              child: Text('ok'),
+                            ),
+                          )
                       )
-                  )]
+                    ],
+                  )
+                ]
             ),
           );});
         });
