@@ -33,7 +33,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           onTap: (int val) => setState(() => _index = val),
           currentIndex: _index,
           fontSize: 1,
-          iconSize: 35,
+          iconSize: 25,
           items: [
             FloatingNavbarItem(icon: Icons.account_circle, title: ''),
             FloatingNavbarItem(icon: Icons.home, title: '',),

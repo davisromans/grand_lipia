@@ -93,6 +93,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var terminateTime;
   var buyerRating;
   var sellerRating;
+  bool loadingValue = true;
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   var deliveryDate;
@@ -280,9 +281,38 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     ),
   };
 
+  showDialogLoading() {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            content: Row(
+              children: const [
+                CircularProgressIndicator(
+                  color: Colors.orange,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Loading")
+              ],
+            ),
+          );
+        });
+  }
+
+  void _enableLoading(bool loadingValue) {
+    if (loadingValue == true) {
+      showDialogLoading();
+    } else {
+      Navigator.pop(context);
+    }
+  }
 
    deleteProduct() async {
     try {
+      _enableLoading(loadingValue);
       http.Response res = await http.post(
         Uri.parse('$uri/admin/delete-product'),
         headers: {
@@ -297,14 +327,37 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         response: res,
         context: context,
         onSuccess: () {
+          if (mounted) {
+            setState(() {
+              loadingValue = false;
+            });
+          }
+          _enableLoading(loadingValue);
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => NavigationScreen()));
           showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
         },
+        onFailed: (){
+          if (mounted) {
+            setState(() {
+              loadingValue = false;
+            });
+          }
+          _enableLoading(loadingValue);
+          setState(() {
+            loadingValue = false;
+          });
+        }
       );
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          loadingValue = false;
+        });
+      }
+      _enableLoading(loadingValue);
       showSnackBar(context, e.toString());
     }
   }
@@ -461,7 +514,6 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         _ratingValue = double.parse(sellerRating);
       }
     }
-
   }
 
 
@@ -953,7 +1005,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                     ),
                 ],
               ),
-              isSeller?Padding(
+              isSeller && status == "Imetumwa"?Padding(
                 padding: const EdgeInsets.fromLTRB(30,15,30, 15),
                 child: Row(
                   children: [
@@ -998,25 +1050,30 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                   ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey,
+                                      width: 1.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
+                                      color: Colors.grey,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
+
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
+                                      color: Colors.white,
+                                      width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor:
-                                  FlutterFlowTheme.of(context).secondaryBackground,
+                                  fillColor: Colors.transparent,
                                 ),
                                 textAlign: TextAlign.left,
                                 enabled: false,
@@ -1074,22 +1131,27 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
+                                      color: Colors.grey,
+                                      width: 1.5,
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      width: 1,
+                                      color: Colors.white,
+                                      width: 2,
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey,
+                                      width: 1.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   filled: true,
-                                  fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                  fillColor: Colors.transparent,
                                 ),
                                 textAlign: TextAlign.left,
                                 enabled: false,
@@ -1185,7 +1247,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                    rateUser();
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
+                                    padding: const EdgeInsets.fromLTRB(5, 15,5,15),
                                     child: Text(
                                       status == 'Imetumwa'?'Kubali':"Kamilisha",
                                     ),
@@ -1193,7 +1255,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                   style: ElevatedButton.styleFrom(
                                     primary:  FlutterFlowTheme.of(context)
                                         .tertiaryColor,
-                                    onPrimary: Colors.black,
+                                    onPrimary: Colors.white,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
                                         .override(
@@ -1250,14 +1312,14 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                                 )));
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
+                                    padding: const EdgeInsets.fromLTRB(5, 15,5,15),
                                     child: Text(
                                       'Sitisha',
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     primary:   FlutterFlowTheme.of(context).tertiaryColor,
-                                    onPrimary: Colors.black,
+                                    onPrimary: Colors.white,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
                                         .override(

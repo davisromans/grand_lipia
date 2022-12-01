@@ -14,6 +14,40 @@ import '../screen_navigation_widget.dart';
 
 
 class sellerRequest {
+  bool loadingValue = true;
+  showDialogLoading(context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Color(0xFF1A2023),
+            content: Row(
+              children: [
+                Container(
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  child: Text("Tafadhali subiri"),
+                )
+              ],
+            ),
+          );
+        });
+  }
+  void _enableLoading(context, bool loadingValue) {
+    if (loadingValue == true) {
+      showDialogLoading(context);
+
+    } else {
+      Navigator.pop(context);
+    }
+  }
   void makeContract({
     required BuildContext context,
     required String name,
@@ -36,6 +70,7 @@ class sellerRequest {
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
+      _enableLoading(context, loadingValue = true);
       final cloudinary = CloudinaryPublic('dorxkvvvv', 'p2ayj0bu');
       List<String> imageUrls = [];
 
@@ -77,6 +112,8 @@ class sellerRequest {
         response: res,
         context: context,
         onSuccess: () {
+          loadingValue = false;
+          _enableLoading(context, loadingValue = false);
           showSnackBar(context, 'Umefanikiwa kutengeneza mkataba');
           Navigator.pop(context);
           Navigator.push(
@@ -84,8 +121,14 @@ class sellerRequest {
               MaterialPageRoute(
                   builder: (context) => NavigationScreen()));
         },
+          onFailed: (){
+            loadingValue = false;
+            _enableLoading(context, loadingValue = false);
+          }
       );
     } catch (e) {
+      loadingValue = false;
+      _enableLoading(context, loadingValue = false);
       showSnackBar(context, e.toString());
       print(e.toString());
     }
@@ -134,6 +177,7 @@ class sellerRequest {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
+      _enableLoading(context, loadingValue = true);
       http.Response res = await http.post(
         Uri.parse('$uri/admin/delete-product'),
         headers: {
@@ -149,80 +193,27 @@ class sellerRequest {
         response: res,
         context: context,
         onSuccess: () {
-          onSuccess();
+          loadingValue = false;
+          _enableLoading(context, loadingValue = false);
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => NavigationScreen()));
           showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
         },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-  }
-
-  Future<List<Order>> fetchAllOrders(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    List<Order> orderList = [];
-    try {
-      http.Response res =
-          await http.get(Uri.parse('$uri/admin/get-orders'), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
-            orderList.add(
-              Order.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
-              ),
-            );
+          onFailed: (){
+            loadingValue = false;
+            _enableLoading(context, loadingValue = false);
           }
-        },
       );
     } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-    return orderList;
-  }
-
-  void changeOrderStatus({
-    required BuildContext context,
-    required int status,
-    required Order order,
-    required VoidCallback onSuccess,
-  }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    try {
-      http.Response res = await http.post(
-        Uri.parse('$uri/admin/change-order-status'),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-        body: jsonEncode({
-          'id': order.id,
-          'status': status,
-        }),
-      );
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: onSuccess,
-      );
-    } catch (e) {
+      loadingValue = false;
+      _enableLoading(context, loadingValue = false);
       showSnackBar(context, e.toString());
     }
   }
+
+
 
 
 }

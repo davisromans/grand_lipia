@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
         color: FlutterFlowTheme.of(context).primaryBackground,
         child: Builder(
           builder: (context) => Image.asset(
-            'assets/images/senero.jpg',
+            'assets/images/lipia.png',
             fit: BoxFit.contain,
           ),
         ),

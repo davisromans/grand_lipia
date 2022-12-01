@@ -59,6 +59,9 @@ dependencies:
   flutter_svg:
   expandable: ^5.0.1
   animated_snack_bar: ^0.3.0
+  cool_alert: ^1.1.0
+  loading_indicator: ^3.1.0
+  flutter_launcher_icons: ^0.11.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -73,7 +76,7 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: 'assets/images/app_launcher_icon.jpg'
+  image_path: 'assets/images/lipia.png'
 
 
 

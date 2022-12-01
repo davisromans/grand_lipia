@@ -12,7 +12,44 @@ import '../Utils/user_provider.dart';
 import '../Utils/utils.dart';
 
 
+
+
+
 class AuthService {
+  bool loadingValue = false;
+  showDialogLoading(context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Color(0xFF1A2023),
+            content: Row(
+              children: [
+                Container(
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  child: Text("Tafadhali subiri"),
+                )
+              ],
+            ),
+          );
+        });
+  }
+  void _enableLoading(context, bool loadingValue) {
+    if (loadingValue == true) {
+      showDialogLoading(context);
+
+    } else {
+      Navigator.pop(context);
+    }
+  }
   // sign up user
   void signUpUser({
     required BuildContext context,
@@ -21,6 +58,7 @@ class AuthService {
     required String name,
   }) async {
     try {
+      _enableLoading(context, loadingValue = true);
       User user = User(
         id: '',
         name: name,
@@ -43,14 +81,21 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () {
-          print('$uri/api/signup');
+          loadingValue = false;
+          _enableLoading(context, loadingValue = false);
           showSnackBar(
             context,
             'Akaunti imetengenezwa kikamilifu!',
           );
         },
+        onFailed: (){
+          loadingValue = false;
+          _enableLoading(context, loadingValue = false);
+        }
       );
     } catch (e) {
+      loadingValue = false;
+      _enableLoading(context, loadingValue = false);
       showSnackBar(context, e.toString());
       print(e.toString());
     }
@@ -63,6 +108,14 @@ class AuthService {
     required String password,
   }) async {
     try {
+      _enableLoading(context, loadingValue = true);
+      var req = jsonEncode({
+        'phone': phone,
+        'password': password,
+      });
+      var url = '$uri/api/signin';
+      print(url);
+      print(req);
       http.Response res = await http.post(
         Uri.parse('$uri/api/signin'),
         body: jsonEncode({
@@ -77,6 +130,8 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () async {
+          loadingValue = false;
+          _enableLoading(context, loadingValue = false);
           SharedPreferences prefs = await SharedPreferences.getInstance();
           var returnData = jsonDecode(res.body);
 
@@ -116,9 +171,15 @@ class AuthService {
               MaterialPageRoute(
                   builder: (context) =>
                       NavigationScreen()));
-        }}
+        }},
+          onFailed: (){
+        loadingValue = false;
+        _enableLoading(context, loadingValue = false);
+      }
           );
     } catch (e) {
+      loadingValue = false;
+      _enableLoading(context, loadingValue = false);
       showSnackBar(context, e.toString());
     }
   }
@@ -156,41 +217,6 @@ class AuthService {
         var userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userRes.body);
       }
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-  }
-
-
-  void saveUserAddress({
-    required BuildContext context,
-    required String address,
-  }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    try {
-      http.Response res = await http.post(
-        Uri.parse('$uri/api/save-user-address'),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-        body: jsonEncode({
-          'address': address,
-        }),
-      );
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          User user = userProvider.user.copyWith(
-            address: jsonDecode(res.body)['address'],
-          );
-
-          userProvider.setUserFromModel(user);
-        },
-      );
     } catch (e) {
       showSnackBar(context, e.toString());
     }

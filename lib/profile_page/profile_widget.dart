@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/index.dart';
 import '../Utils/error_handling.dart';
 import '../Utils/user.dart';
 import '../Utils/utils.dart';
@@ -33,7 +35,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
   var getPassword;
   bool isDisabled = false;
   List<File> images = [];
-  bool loadingValue = false;
+  bool loadingValue = true;
 
   final animationsMap = {
     'circleImageOnPageLoadAnimation': AnimationInfo(
@@ -248,6 +250,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
 
   Future<void> updateInfo() async {
     try {
+      _enableLoading(loadingValue);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final cloudinary = CloudinaryPublic('dorxkvvvv', 'p2ayj0bu');
       List<String> imageUrls = [];
@@ -281,6 +284,15 @@ class _ProfileWidgetState extends State<ProfileWidget>
         response: res,
         context: context,
         onSuccess: () async {
+          if (mounted) {
+            setState(() {
+              loadingValue = false;
+            });
+          }
+          _enableLoading(loadingValue);
+          setState(() {
+            loadingValue = false;
+          });
           SharedPreferences prefs = await SharedPreferences.getInstance();
           var returnData = jsonDecode(res.body);
           print(returnData);
@@ -293,7 +305,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
           //   context,
           //   'Umefanikiwa kubadili taarifa!',
           // );
-          topBar(context, 'Hongera', 'Umefanikiwa kubadili taarifa');
+          showSnackBar(context,  'Umefanikiwa kubadili taarifa');
 
         },
       );
@@ -355,7 +367,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
         centerTitle: false,
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFF181717),
+        backgroundColor: Color(0xFF1A2023),
         toolbarHeight: 50,
         title: Padding(
           padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
@@ -824,7 +836,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          updateInfo();
+                          //updateInfo();
                         },
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -865,7 +877,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          updateInfo();
+                          _onPressLogout();
                         },
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -934,5 +946,31 @@ class _ProfileWidgetState extends State<ProfileWidget>
         ),
       ),
     );
+  }
+
+  _onPressLogout() {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        title: 'Angalizo!',
+        text: 'Una uhakika unataka kutoka kwenye akaunti yako?',
+        confirmBtnText: 'Ndio',
+        cancelBtnText: 'Hapana',
+        confirmBtnColor: FlutterFlowTheme.of(context).tertiaryColor,
+        onConfirmBtnTap: () {
+          onSignOut();
+        });
+  }
+
+  onSignOut() async {
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+
+    sharedPreferences.setBool('logged_in', false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPageWidget()),
+            (route) => false);
+    return false;
   }
 }

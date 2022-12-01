@@ -482,8 +482,9 @@ class _TerminateWidgetState extends State<TerminateWidget>
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
-                              primary:  widget.terminate == 'Active'?Colors.lightGreen:Colors.grey,
-                              onPrimary: Colors.black,
+                              primary:  widget.terminate == 'Active'? FlutterFlowTheme.of(context)
+                                  .tertiaryColor:Colors.grey,
+                              onPrimary: Colors.white,
                               textStyle: FlutterFlowTheme.of(context)
                                   .title1
                                   .override(
@@ -494,7 +495,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                  BorderRadius.circular(15)),
+                                  BorderRadius.circular(5)),
                             ),
                           );
                         }),

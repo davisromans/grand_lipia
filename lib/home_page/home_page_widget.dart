@@ -1,19 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_app/chat_page/chat_page_widget.dart';
 import 'package:test_app/components/contract_info_widget.dart';
-import 'package:test_app/profile_page/profile_widget.dart';
-import 'package:test_app/transaction_page/transaction_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Utils/product.dart';
-import '../Utils/user_provider.dart';
 import '../components/admin_services.dart';
 import '../components/contract_widget.dart';
-import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../login_page/login_page_widget.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key,}) : super(key: key);
@@ -71,12 +65,16 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     return 'Morning';
   }
 
+  var whatsappUrl =
+      "whatsapp://send?phone=255625255004" +
+          "&text=${Uri.encodeComponent('hello')}";
+
   _launchURL() async {
-    const url = 'https://api.whatsapp.com/qr/GGJCIF63U6ZSJ1?autoload=1&app_absent=0';
-    if (await canLaunch(url)) {
-      await launch(url);
+    const uri = 'https://wa.me/qr/GGJCIF63U6ZSJ1';
+    if (await canLaunch(uri)) {
+      await launch(uri);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $uri';
     }
   }
 
@@ -85,11 +83,19 @@ class _HomePageWidgetState extends State<HomePageWidget> with TickerProviderStat
     return Scaffold(
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF2A2929),
+        backgroundColor: Color(0xFF1A2023),
         splashColor:Colors.white,
         onPressed: () {
-         _launchURL();
-        },
+          //To remove the keyboard when button is pressed
+         // FocusManager.instance.primaryFocus?.unfocus();
+          var whatsappUrl =
+              "whatsapp://send?phone=255658457580" +
+                  "&text=${Uri.encodeComponent('Habari! Nimepata changamoto baada ya kusitisha mkataba')}";
+          try {
+            launch(whatsappUrl);
+          } catch (e) {        //To handle error and display error message
+           print(e.toString());
+        }},
         child: const Icon(Icons.chat, color: Colors.white),
       ),
       //BUTTON LOCATION

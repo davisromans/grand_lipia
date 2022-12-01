@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 
 
-String uri = 'http://0.0.0.0:3000';
+String uri = 'http://139.144.69.227:3001';
 //String uri = 'http://10.0.2.2:3000';
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(text),
-      backgroundColor: Colors.orange,
+      content: Text(text, style: TextStyle(color: Colors.white),),
+      backgroundColor: Colors.black,
     ),
   );
 }

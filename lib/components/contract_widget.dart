@@ -779,7 +779,7 @@ class _ContractWidgetState extends State<ContractWidget>
                           padding:
                               EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                           child: Container(
-                            width: MediaQuery.of(context).size.width*0.76,
+                            width: MediaQuery.of(context).size.width*0.7,
                             child: TextField(
                               controller: buyerPhone,
                               decoration: InputDecoration(

@@ -265,7 +265,7 @@ class _TransactionWidgetState extends State<TransactionWidget>
           centerTitle: false,
           elevation: 0,
           automaticallyImplyLeading: false,
-          backgroundColor: Color(0xFF181717),
+          backgroundColor: Color(0xFF1A2023),
           toolbarHeight: 50,
           title: Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
@@ -331,9 +331,9 @@ class _TransactionWidgetState extends State<TransactionWidget>
                       padding: EdgeInsetsDirectional.fromSTEB(10, 8, 10, 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 90,
+                        height: 80,
                         decoration: BoxDecoration(
-                          color: Color(0xFF272727),
+                          color: Color(0xFF1A2023),
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(
@@ -350,8 +350,8 @@ class _TransactionWidgetState extends State<TransactionWidget>
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Container(
-                                width: 60,
-                                height: 60,
+                                width: 55,
+                                height: 55,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.white,
@@ -394,7 +394,7 @@ class _TransactionWidgetState extends State<TransactionWidget>
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 20,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                         ),
