@@ -62,6 +62,10 @@ dependencies:
   cool_alert: ^1.1.0
   loading_indicator: ^3.1.0
   flutter_launcher_icons: ^0.11.0
+  photo_view:
+  pull_to_refresh: ^2.0.0
+  image_downloader: ^0.31.0
+
 
 
   # The following adds the Cupertino Icons font to your application.

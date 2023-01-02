@@ -1,9 +1,9 @@
-import 'package:test_app/home_page/home_page_widget.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import '../Utils/error_handling.dart';
 import '../Utils/utils.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -459,7 +459,7 @@ class _TerminateWidgetState extends State<TerminateWidget>
                 ],
               ),
         Padding(
-                  padding: const EdgeInsets.only(top: 15, bottom: 15, left:25, right: 25),
+          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 35, right: 25),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 55,

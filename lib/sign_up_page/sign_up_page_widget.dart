@@ -1,7 +1,4 @@
-import 'package:test_app/index.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 
@@ -45,7 +42,6 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
     print(password.text);
     print(userName.text);
     print(phoneNumber.text);
-
   }
 
   @override

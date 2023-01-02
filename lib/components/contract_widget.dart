@@ -7,11 +7,13 @@ import '../Utils/error_handling.dart';
 import '../Utils/utils.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'admin_services.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 
 class ContractWidget extends StatefulWidget {
   const ContractWidget({
@@ -278,6 +280,7 @@ class _ContractWidgetState extends State<ContractWidget>
       );
   }
 
+
   selectImages() async {
     var res = await pickImages();
     setState(() {
@@ -359,7 +362,7 @@ class _ContractWidgetState extends State<ContractWidget>
         title: Padding(
           padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
           child: Text(
-            'Initiate contract',
+            'Tengeneza mkataba',
             style: FlutterFlowTheme.of(context).bodyText2.override(
                   fontFamily: 'Outfit',
                   color: Colors.white,
@@ -382,7 +385,7 @@ class _ContractWidgetState extends State<ContractWidget>
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(15, 19, 15, 0),
                 child: Text(
-                  'The information filled will be displayed to you customer once submitted',
+                  'Taarifa utakazo jaza zitaonekana kwa mteja ukishautuma mkataba huu',
                   textAlign: TextAlign.start,
                   style: FlutterFlowTheme.of(context).title1.override(
                         fontFamily: 'Outfit',
@@ -403,7 +406,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                           child: Text(
-                            'Product Name',
+                            'Jina la bidhaa au huduma',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -470,7 +473,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                           child: Text(
-                            'Product Specifications',
+                            'Maelezo ya bidhaa au huduma',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -492,7 +495,7 @@ class _ContractWidgetState extends State<ContractWidget>
                       controller: specs,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'enter specifications',
+                        hintText: 'Tafdhali andika maelezo yote muhimu juu ya bidhaa au huduma husika',
                         hintStyle: FlutterFlowTheme.of(context)
                             .bodyText2
                             .override(
@@ -541,7 +544,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Product Price (Plus Derivery)',
+                            'Kiasi',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -563,7 +566,7 @@ class _ContractWidgetState extends State<ContractWidget>
                       controller: price,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'enter price',
+                        hintText: 'mf. 5000',
                         hintStyle: FlutterFlowTheme.of(context)
                             .bodyText2
                             .override(
@@ -611,7 +614,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Delivery Details (Location)',
+                            'Eneo la kuwasilisha',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -633,7 +636,7 @@ class _ContractWidgetState extends State<ContractWidget>
                       controller: location,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'enter location',
+                        hintText: '',
                         hintStyle: FlutterFlowTheme.of(context)
                             .bodyText2
                             .override(
@@ -680,7 +683,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Product Image ',
+                            'Picha ya bidhaa (kama ipo)',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -699,23 +702,30 @@ class _ContractWidgetState extends State<ContractWidget>
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 0),
                     child: images.isNotEmpty
-                        ? CarouselSlider(
-                            items: images.map(
-                              (i) {
-                                return Builder(
-                                  builder: (BuildContext context) => Image.file(
-                                    i,
-                                    fit: BoxFit.cover,
-                                    height: 200,
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                            options: CarouselOptions(
-                              viewportFraction: 1,
-                              height: 200,
+                        ? InkWell(
+                      onTap: selectImages,
+                          child: CarouselSlider(
+                              items: images.map(
+                                (i) {
+                                  return Builder(
+                                    builder: (BuildContext context) => Image.file(
+
+                                      i,
+                                      fit: BoxFit.cover,
+                                      height: 200,
+                                      filterQuality: FilterQuality.low,
+                                      repeat: ImageRepeat.noRepeat,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                              options: CarouselOptions(
+                                autoPlay: true,
+                                viewportFraction: 1,
+                                height: 200,
+                              ),
                             ),
-                          )
+                        )
                         : GestureDetector(
                             onTap: selectImages,
                             child: DottedBorder(
@@ -739,7 +749,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                     ),
                                     const SizedBox(height: 15),
                                     Text(
-                                      'Select Product Images',
+                                      '',
                                       style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey.shade400,
@@ -759,7 +769,7 @@ class _ContractWidgetState extends State<ContractWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            'Buyer\u0027s contact(Phone or Email)',
+                            'Namba ya mteja',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -785,7 +795,7 @@ class _ContractWidgetState extends State<ContractWidget>
                             child: TextField(
                               controller: buyerPhone,
                               decoration: InputDecoration(
-                                hintText: 'Ingiza namba ya mteja',
+                                hintText: '',
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .bodyText2
                                     .override(
@@ -900,7 +910,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(15, 0, 0, 0),
                                               child: Text(
-                                                'Buyer\u0027s Information:',
+                                                'Taarifa za mteja:',
                                                 textAlign: TextAlign.start,
                                                 style:
                                                     FlutterFlowTheme.of(context)
@@ -932,7 +942,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                               child: infoList[index] == ''
                                                   ? Container()
                                                   : Text(
-                                                      'Name: ' +
+                                                      'Jina: ' +
                                                           infoList[index]
                                                               ['name'],
                                                       textAlign:
@@ -970,7 +980,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(15, 0, 0, 0),
                                               child: Text(
-                                                'Phone number: ' +
+                                                'Namba ya simu: ' +
                                                     infoList[index]['phone'],
                                                 textAlign: TextAlign.start,
                                                 style:
@@ -1004,7 +1014,7 @@ class _ContractWidgetState extends State<ContractWidget>
                                                   .fromSTEB(15, 0, 0, 0),
                                               child: Text(
                                                 buyerRating != '5.0 / 5.0'
-                                                ?'Rating: ' + buyerRating.toString() + ' / 5.0'
+                                                ?'Nyota: ' + buyerRating.toString() + ' / 5.0'
                                                 :'5.0 / 5.0',
                                                 textAlign: TextAlign.start,
                                                 style:

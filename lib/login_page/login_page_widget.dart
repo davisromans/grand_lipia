@@ -1,10 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../sign_up_page/auth_service.dart';
 import '../sign_up_page/sign_up_page_widget.dart';
 import 'package:flutter/material.dart';
-
 
 class LoginPageWidget extends StatefulWidget {
   const LoginPageWidget({Key? key}) : super(key: key);
@@ -249,15 +247,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.leftToRight,
-                          duration: Duration(milliseconds: 300),
-                          reverseDuration: Duration(milliseconds: 300),
-                          child: SignUpPageWidget(),
-                        ),
-                      );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SignUpPageWidget()));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

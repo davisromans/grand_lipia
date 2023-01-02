@@ -21,8 +21,7 @@ class ProfileWidget extends StatefulWidget {
   _ProfileWidgetState createState() => _ProfileWidgetState();
 }
 
-class _ProfileWidgetState extends State<ProfileWidget>
-    with TickerProviderStateMixin {
+class _ProfileWidgetState extends State<ProfileWidget> with TickerProviderStateMixin {
   TextEditingController usernameField = TextEditingController();
   TextEditingController phoneField = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -225,10 +224,11 @@ class _ProfileWidgetState extends State<ProfileWidget>
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Color(0xFF1A2023),
             content: Row(
               children: const [
                 CircularProgressIndicator(
-                  color: Colors.orange,
+                  color: Colors.green,
                 ),
                 SizedBox(
                   width: 10,
@@ -310,8 +310,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
         },
       );
     } catch (e) {
-      showSnackBar(context, e.toString());
-      print(e.toString());
+
     }
   }
 
@@ -909,7 +908,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
               children: [
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+                    padding: const EdgeInsets.only(top: 10, bottom: 20, left: 15, right: 15),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 55,
@@ -963,10 +962,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
   }
 
   onSignOut() async {
-    final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    sharedPreferences.setBool('logged_in', false);
+    prefs.setBool('logged_in', false);
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginPageWidget()),

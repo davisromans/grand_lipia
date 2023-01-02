@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_alert/flutter_platform_alert.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/Utils/product.dart';
 import 'package:test_app/components/terminate_widget.dart';
@@ -13,9 +14,14 @@ import 'package:flutter/material.dart';
 import '../components/admin_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:date_format/date_format.dart';
-
-import '../flutter_flow/flutter_flow_util.dart';
 import '../screen_navigation_widget.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_downloader/image_downloader.dart';
 
 class ContractInfoWidget extends StatefulWidget {
   const ContractInfoWidget(
@@ -26,16 +32,16 @@ class ContractInfoWidget extends StatefulWidget {
       this.Location,
       this.Image,
       this.Seller,
-        this.Dealer,
-        this.Id,
-        this.Url,
-        this.Status,
-        this.buyerImage,
-        this.receiver,
-        this.sellerId,
-        this.terminate,
-        this.buyerRating,
-        this.sellerRating,
+      this.Dealer,
+      this.Id,
+      this.Url,
+      this.Status,
+      this.buyerImage,
+      this.receiver,
+      this.sellerId,
+      this.terminate,
+      this.buyerRating,
+      this.sellerRating,
       this.Buyer})
       : super(
           key: key,
@@ -64,6 +70,7 @@ class ContractInfoWidget extends StatefulWidget {
 
 class _ContractInfoWidgetState extends State<ContractInfoWidget>
     with TickerProviderStateMixin {
+  PageController pageController = PageController();
   TextEditingController productName = TextEditingController();
   TextEditingController productSpecs = TextEditingController();
   TextEditingController productPrice = TextEditingController();
@@ -94,6 +101,11 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
   var buyerRating;
   var sellerRating;
   bool loadingValue = true;
+  String _message = "";
+  String _path = "";
+  String _size = "";
+  String _mimeType = "";
+  File? _imageFile;
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   var deliveryDate;
@@ -290,7 +302,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
             content: Row(
               children: const [
                 CircularProgressIndicator(
-                  color: Colors.orange,
+                  color: Colors.green,
                 ),
                 SizedBox(
                   width: 10,
@@ -310,7 +322,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     }
   }
 
-   deleteProduct() async {
+  deleteProduct() async {
     try {
       _enableLoading(loadingValue);
       http.Response res = await http.post(
@@ -324,33 +336,30 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       );
 
       httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          if (mounted) {
+          response: res,
+          context: context,
+          onSuccess: () {
+            if (mounted) {
+              setState(() {
+                loadingValue = false;
+              });
+            }
+            _enableLoading(loadingValue);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NavigationScreen()));
+            showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
+          },
+          onFailed: () {
+            if (mounted) {
+              setState(() {
+                loadingValue = false;
+              });
+            }
+            _enableLoading(loadingValue);
             setState(() {
               loadingValue = false;
             });
-          }
-          _enableLoading(loadingValue);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NavigationScreen()));
-          showSnackBar(context, 'Umefanikiwa kusitisha mkataba');
-        },
-        onFailed: (){
-          if (mounted) {
-            setState(() {
-              loadingValue = false;
-            });
-          }
-          _enableLoading(loadingValue);
-          setState(() {
-            loadingValue = false;
           });
-        }
-      );
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -379,10 +388,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         response: res,
         context: context,
         onSuccess: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NavigationScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => NavigationScreen()));
           showSnackBar(context, 'Sasa unaweza kusitisha mkataba');
         },
       );
@@ -401,8 +408,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         },
         body: jsonEncode({
           'id': widget.sellerId,
-          'rating' : _ratingValue,
-          'userId' : userId,
+          'rating': _ratingValue,
+          'userId': userId,
         }),
       );
 
@@ -425,11 +432,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode({
-          'id': id,
-          'status': 'Imekubaliwa',
-          'deliveryDate': deliveryDate
-        }),
+        body: jsonEncode(
+            {'id': id, 'status': 'Imekubaliwa', 'deliveryDate': deliveryDate}),
       );
 
       httpErrorHandle(
@@ -437,10 +441,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         context: context,
         onSuccess: () {
           delayTimer();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NavigationScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => NavigationScreen()));
           showSnackBar(context, 'Mkataba umekubaliwa');
         },
       );
@@ -468,7 +470,6 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -495,31 +496,27 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     });
     fetchAllProducts();
 
-    if(isSeller == false){
-      if(buyerRating.length>3){
+    if (isSeller == false) {
+      if (buyerRating.length > 3) {
         buyerRating = buyerRating.substring(0, 3);
       }
-      if(buyerRating == '5.0 / 5.0'){
-      }else{
+      if (buyerRating == '5.0 / 5.0') {
+      } else {
         buyerRating == 5.0;
         _ratingValue = double.parse(buyerRating);
       }
-
-
     } else {
-      if(sellerRating.length>3){
+      if (sellerRating.length > 3) {
         sellerRating = sellerRating.substring(0, 3);
       }
 
-      if(sellerRating == '5.0 / 5.0'){
-      }else{
+      if (sellerRating == '5.0 / 5.0') {
+      } else {
         sellerRating == 5.0;
         _ratingValue = double.parse(sellerRating);
       }
     }
   }
-
-
 
   double? _ratingValue;
 
@@ -568,7 +565,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                   width: MediaQuery.of(context).size.width,
                   height: 80,
                   decoration: BoxDecoration(
-                    color:  Color(0xFF1A2023),
+                    color: Color(0xFF1A2023),
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
@@ -603,8 +600,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                isSeller?
-                                dpBuyer: dpSeller,
+                                isSeller ? dpBuyer : dpSeller,
                               ),
                             ),
                             shape: BoxShape.circle,
@@ -622,7 +618,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         15, 19, 0, 0),
                                     child: Text(
-                                      userPhone == widget.Buyer?sellerName:receiver,
+                                      userPhone == widget.Buyer
+                                          ? sellerName
+                                          : receiver,
                                       textAlign: TextAlign.start,
                                       style: FlutterFlowTheme.of(context)
                                           .title1
@@ -643,7 +641,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   15, 4, 0, 0),
                                           child: RatingBar(
-                                              initialRating: isSeller?double.parse(sellerRating):double.parse(buyerRating),
+                                              initialRating: isSeller
+                                                  ? double.parse(sellerRating)
+                                                  : double.parse(buyerRating),
                                               ignoreGestures: true,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
@@ -654,14 +654,14 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                               glowRadius: 2,
                                               ratingWidget: RatingWidget(
                                                   full: const Icon(Icons.star,
-                                                      color:  Colors.white),
+                                                      color: Colors.white),
                                                   half: const Icon(
                                                     Icons.star_half,
-                                                    color:  Colors.white,
+                                                    color: Colors.white,
                                                   ),
                                                   empty: const Icon(
                                                     Icons.star_outline,
-                                                    color:  Colors.white,
+                                                    color: Colors.white,
                                                   )),
                                               onRatingUpdate: (value) {
                                                 setState(() {
@@ -673,22 +673,25 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   6, 6, 0, 0),
-                                          child: isSeller?Text(
-                                            _ratingValue == '5.0 / 5.0'
-                                              ? '5.0 / 5.0'
-                                                : '$sellerRating' + ' / 5.0',
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16),
-                                          ):
-                                          Text(
-                                            _ratingValue == '5.0 / 5.0'
-                                                ? '5.0 / 5.0'
-                                                : '$buyerRating' + ' / 5.0',
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16),
-                                          ),
+                                          child: isSeller
+                                              ? Text(
+                                                  _ratingValue == '5.0 / 5.0'
+                                                      ? '5.0 / 5.0'
+                                                      : '$sellerRating' +
+                                                          ' / 5.0',
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16),
+                                                )
+                                              : Text(
+                                                  _ratingValue == '5.0 / 5.0'
+                                                      ? '5.0 / 5.0'
+                                                      : '$buyerRating' +
+                                                          ' / 5.0',
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16),
+                                                ),
                                         ),
                                       ],
                                     ),
@@ -710,19 +713,19 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                          Text(
-                            'Jina la bidhaa au huduma',
-                            textAlign: TextAlign.start,
-                            style: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                  fontSize: 14,
-                                ),
-                          ).animated(
-                              [animationsMap['textOnPageLoadAnimation1']!]),
+                        Text(
+                          'Jina la bidhaa au huduma',
+                          textAlign: TextAlign.start,
+                          style: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Outfit',
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
+                                fontSize: 14,
+                              ),
+                        ).animated(
+                            [animationsMap['textOnPageLoadAnimation1']!]),
                       ],
                     ),
                   ),
@@ -751,8 +754,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor:
-                        Color(0xFF1A2023),
+                        fillColor: Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -829,26 +831,26 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
-                          child: Text(
-                            'Kiasi',
-                            textAlign: TextAlign.start,
-                            style: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                  fontSize: 14,
-                                ),
-                          ).animated(
-                              [animationsMap['textOnPageLoadAnimation3']!]),
-                        ),
-                      ],
-                    ),
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+                        child: Text(
+                          'Kiasi',
+                          textAlign: TextAlign.start,
+                          style: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Outfit',
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
+                                fontSize: 14,
+                              ),
+                        ).animated(
+                            [animationsMap['textOnPageLoadAnimation3']!]),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                     child: TextFormField(
@@ -872,8 +874,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor:
-                        Color(0xFF1A2023),
+                        fillColor: Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -887,27 +888,27 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
               ),
               Column(
                 children: [
-               Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
-                          child: Text(
-                            'Eneo la kuwasilisha',
-                            textAlign: TextAlign.start,
-                            style: FlutterFlowTheme.of(context)
-                                .subtitle2
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                  fontSize: 14,
-                                ),
-                          ).animated(
-                              [animationsMap['textOnPageLoadAnimation4']!]),
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
+                        child: Text(
+                          'Eneo la kuwasilisha',
+                          textAlign: TextAlign.start,
+                          style: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Outfit',
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
+                                fontSize: 14,
+                              ),
+                        ).animated(
+                            [animationsMap['textOnPageLoadAnimation4']!]),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                     child: TextFormField(
@@ -931,8 +932,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor:
-                        Color(0xFF1A2023),
+                        fillColor: Color(0xFF1A2023),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Outfit',
@@ -954,7 +954,9 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                           child: Text(
-                            isSeller == true?'Namba ya muuzaji':'Namba ya mteja',
+                            isSeller == true
+                                ? 'Namba ya muuzaji'
+                                : 'Namba ya mteja',
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -970,211 +972,225 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                       ],
                     ),
                   ),
-                   Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-                      child: TextFormField(
-                        controller: buyer,
-                        autofocus: true,
-                        obscureText: false,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: '',
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+                    child: TextFormField(
+                      controller: buyer,
+                      autofocus: true,
+                      obscureText: false,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: '',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            width: 1,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          filled: true,
-                          fillColor:
-                          Color(0xFF1A2023),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Outfit',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                      ).animated(
-                          [animationsMap['textFieldOnPageLoadAnimation4']!]),
-                    ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFF1A2023),
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                            fontFamily: 'Outfit',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
+                    ).animated(
+                        [animationsMap['textFieldOnPageLoadAnimation4']!]),
+                  ),
                 ],
               ),
-              isSeller && status == "Imetumwa"?Padding(
-                padding: const EdgeInsets.fromLTRB(30,15,30, 15),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              isSeller && status == "Imetumwa"
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
-                            child: Text(
-                              'Tarehe',
-                              textAlign: TextAlign.start,
-                              style: FlutterFlowTheme.of(context)
-                                  .subtitle2
-                                  .override(
-                                fontFamily: 'Outfit',
-                                color:
-                                FlutterFlowTheme.of(context).primaryColor,
-                                fontSize: 14,
-                              ),
-                            ).animated(
-                                [animationsMap['textOnPageLoadAnimation5']!]),
-                          ),
-
-                          InkWell(
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              alignment: Alignment.center,
-                              child: TextFormField(
-                                style: TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                  hintText: 'Chagua tarehe',
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                    fontFamily: 'Outfit',
-                                    color: CupertinoColors.systemGrey4,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.transparent,
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 5),
+                                  child: Text(
+                                    'Tarehe',
+                                    textAlign: TextAlign.start,
+                                    style: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryColor,
+                                          fontSize: 14,
+                                        ),
+                                  ).animated([
+                                    animationsMap['textOnPageLoadAnimation5']!
+                                  ]),
                                 ),
-                                textAlign: TextAlign.left,
-                                enabled: false,
-                                keyboardType: TextInputType.text,
-                                controller: _dateController,
-                                onSaved: (val) {
-                                  _setDate = val;
-                                },
-                              ),
+                                InkWell(
+                                  onTap: () {
+                                    _selectDate(context);
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: TextFormField(
+                                      style: TextStyle(fontSize: 16),
+                                      decoration: InputDecoration(
+                                        hintText: 'Chagua tarehe',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              color:
+                                                  CupertinoColors.systemGrey4,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                            width: 1.5,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                            width: 1.5,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.transparent,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                      enabled: false,
+                                      keyboardType: TextInputType.text,
+                                      controller: _dateController,
+                                      onSaved: (val) {
+                                        _setDate = val;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 5),
+                                  child: Text(
+                                    'Muda',
+                                    textAlign: TextAlign.start,
+                                    style: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryColor,
+                                          fontSize: 14,
+                                        ),
+                                  ).animated([
+                                    animationsMap['textOnPageLoadAnimation5']!
+                                  ]),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    _selectTime(context);
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: TextFormField(
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText: 'Chagua muda',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              color:
+                                                  CupertinoColors.systemGrey4,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                            width: 1.5,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                            width: 1.5,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.transparent,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                      enabled: false,
+                                      keyboardType: TextInputType.text,
+                                      controller: _timeController,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _setTime = val;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(width: 10,),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
-                            child: Text(
-                              'Muda',
-                              textAlign: TextAlign.start,
-                              style: FlutterFlowTheme.of(context)
-                                  .subtitle2
-                                  .override(
-                                fontFamily: 'Outfit',
-                                color:
-                                FlutterFlowTheme.of(context).primaryColor,
-                                fontSize: 14,
-                              ),
-                            ).animated(
-                                [animationsMap['textOnPageLoadAnimation5']!]),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              _selectTime(context);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              alignment: Alignment.center,
-                              child: TextFormField(
-                                style: TextStyle(fontSize: 16, ),
-                                decoration: InputDecoration(
-                                  hintText: 'Chagua muda',
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                    fontFamily: 'Outfit',
-                                    color: CupertinoColors.systemGrey4,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                ),
-                                textAlign: TextAlign.left,
-                                enabled: false,
-                                keyboardType: TextInputType.text,
-                                controller: _timeController,
-                                onChanged: (val) {
-                                  setState((){
-                                    _setTime = val;
-                                  });
-
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ):Text(''),
+                    )
+                  : Text(''),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -1204,25 +1220,63 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(30, 10, 30, 0),
+                    // child: Container(
+                    //     width: double.infinity,
+                    //     height: 300,
+                    //     decoration: BoxDecoration(
+                    //       color:
+                    //       Color(0xFF1A2023),
+                    //       borderRadius: BorderRadius.circular(5),
+                    //     ),
+                    //     child: ListView.builder(
+                    //         scrollDirection: Axis.horizontal,
+                    //         shrinkWrap: true,
+                    //         itemCount: widget.Image.length,
+                    //         itemBuilder: (BuildContext context, int index) {
+                    //           return Padding(
+                    //             padding: const EdgeInsets.only(right: 8.0),
+                    //             child: Image.network(widget.Image[index]),
+                    //           );
+                    //         })).animated([animationsMap['containerOnPageLoadAnimation']!]),
                     child: Container(
-                        width: double.infinity,
+                        width: MediaQuery.of(context).size.width,
                         height: 300,
-                        decoration: BoxDecoration(
-                          color:
-                          Color(0xFF1A2023),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: widget.Image.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Image.network(widget.Image[index]),
+                        child: GestureDetector(
+
+                          onTap: () {
+                           var get = widget.Image.toList;
+                            _downloadImage(get[int]);
+                          },
+                          child: PhotoViewGallery.builder(
+                            scrollPhysics: const BouncingScrollPhysics(),
+                            wantKeepAlive: true,
+                            builder: (BuildContext context, int index) {
+                              return PhotoViewGalleryPageOptions(
+                                imageProvider:
+                                    NetworkImage(widget.Image[index]),
+                                initialScale: PhotoViewComputedScale.contained,
+                                heroAttributes: PhotoViewHeroAttributes(
+                                    tag: widget.Image[index]),
                               );
-                            })).animated(
-                        [animationsMap['containerOnPageLoadAnimation']!]),
+                            },
+                            itemCount: widget.Image.length,
+                            loadingBuilder: (context, event) => Center(
+                              child: Container(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  color: Colors.green,
+                                  value: event == null
+                                      ? 0
+                                      : event.cumulativeBytesLoaded /
+                                          event.expectedTotalBytes!,
+                                ),
+                              ),
+                            ),
+                            //  backgroundDecoration: backgroundDecoration,
+                            pageController: pageController,
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -1232,50 +1286,57 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                   children: [
                     isSeller
                         ? Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0, bottom: 15, left:10, right: 0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ListView.builder(
-                            itemCount: 1,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return ElevatedButton(
-                                  onPressed: () async {
-                                    status == 'Imetumwa'?activeContract():
-                                   rateUser();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(5, 15,5,15),
-                                    child: Text(
-                                      status == 'Imetumwa'?'Kubali':"Kamilisha",
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    primary:  FlutterFlowTheme.of(context)
-                                        .tertiaryColor,
-                                    onPrimary: Colors.white,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .title1
-                                        .override(
-                                      fontFamily: 'Ubuntu',
-                                      color: Colors.black,
-                                      fontSize: 21,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(5)),
-                                  ),
-                                );
-                              }),
-                        ),
-                      ),
-                    )
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 0, bottom: 15, left: 10, right: 0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ListView.builder(
+                                    itemCount: 1,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return ElevatedButton(
+                                        onPressed: () async {
+                                          status == 'Imetumwa'
+                                              ? activeContract()
+                                              : rateUser();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 15, 5, 15),
+                                          child: Text(
+                                            status == 'Imetumwa'
+                                                ? 'Kubali'
+                                                : "Kamilisha",
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: FlutterFlowTheme.of(context)
+                                              .tertiaryColor,
+                                          onPrimary: Colors.white,
+                                          textStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .title1
+                                                  .override(
+                                                    fontFamily: 'Ubuntu',
+                                                    color: Colors.black,
+                                                    fontSize: 21,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
+                          )
                         : Text(''),
                     isSeller
                         ? SizedBox(
@@ -1284,7 +1345,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                         : Text(''),
                     Flexible(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 0, bottom: 15, left:0, right: 10),
+                        padding: const EdgeInsets.only(
+                            top: 0, bottom: 15, left: 0, right: 10),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           height: 55,
@@ -1297,31 +1359,35 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                               itemBuilder: (context, index) {
                                 return ElevatedButton(
                                   onPressed: () {
-                                    status == 'Imetumwa'?deleteProduct():
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                TerminateWidget(
-                                                  id: id,
-                                                  buyer: widget.Buyer,
-                                                  seller: widget.Seller,
-                                                  product: productName.text,
-                                                  type: type,
-                                                  amount: productPrice.text,
-                                                  imageSeller:dpBuyer,
-                                                  imageBuyer:dpSeller,
-                                                  terminate: widget.terminate,
-                                                )));
+                                    status == 'Imetumwa'
+                                        ? deleteProduct()
+                                        : Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TerminateWidget(
+                                                      id: id,
+                                                      buyer: widget.Buyer,
+                                                      seller: widget.Seller,
+                                                      product: productName.text,
+                                                      type: type,
+                                                      amount: productPrice.text,
+                                                      imageSeller: dpBuyer,
+                                                      imageBuyer: dpSeller,
+                                                      terminate:
+                                                          widget.terminate,
+                                                    )));
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(5, 15,5,15),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(5, 15, 5, 15),
                                     child: Text(
                                       'Sitisha',
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary:   FlutterFlowTheme.of(context).tertiaryColor,
+                                    primary: FlutterFlowTheme.of(context)
+                                        .tertiaryColor,
                                     onPrimary: Colors.white,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .title1
@@ -1332,8 +1398,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
                                           fontWeight: FontWeight.w500,
                                         ),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                   ),
                                 );
                               }),
@@ -1354,122 +1419,107 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (context, setState) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            title: Text(
-              'Please rate us!!!',
-              style: FlutterFlowTheme.of(context).bodyText2.override(
-                fontFamily: 'Ubuntu',
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            content:  Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional
-                              .fromSTEB(15, 4, 0, 0),
-                          child: RatingBar(
-                              initialRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 35,
-                              ignoreGestures: false,
-                              updateOnDrag: true,
-                              glow: true,
-                              glowColor:
-                              Colors.white,
-                              glowRadius: 2,
-                              ratingWidget:
-                              RatingWidget(
-                                  full: const Icon(
-                                      Icons.star,
-                                      color: Colors.white),
-                                  half: const Icon(
-                                    Icons.star_half,
-                                    color:  Colors.white
-                                  ),
-                                  empty: const Icon(
-                                    Icons
-                                        .star_outline,
-                                    color:  Colors.white
-                                  )),
-                              onRatingUpdate: (value) {
-                                setState(() {
-                                  _ratingValue = value;
-                                });
-                              }),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional
-                              .fromSTEB(6, 6, 0, 0),
-                          child: Text(
-                            _ratingValue != null
-                                ? _ratingValue
-                                .toString() +
-                                ' of 5.0'
-                                : 'No rating yet!',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ],
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              title: Text(
+                'Please rate us!!!',
+                style: FlutterFlowTheme.of(context).bodyText2.override(
+                      fontFamily: 'Ubuntu',
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                textAlign: TextAlign.center,
+              ),
+              content: Column(mainAxisSize: MainAxisSize.min, children: [
+                Container(
+                  child: Column(
                     children: [
-                      Container(
-                          height: MediaQuery.of(context).size.height * 0.12,
-                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('cancel'),
-                            ),
-                          )
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 4, 0, 0),
+                        child: RatingBar(
+                            initialRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 35,
+                            ignoreGestures: false,
+                            updateOnDrag: true,
+                            glow: true,
+                            glowColor: Colors.white,
+                            glowRadius: 2,
+                            ratingWidget: RatingWidget(
+                                full:
+                                    const Icon(Icons.star, color: Colors.white),
+                                half: const Icon(Icons.star_half,
+                                    color: Colors.white),
+                                empty: const Icon(Icons.star_outline,
+                                    color: Colors.white)),
+                            onRatingUpdate: (value) {
+                              setState(() {
+                                _ratingValue = value;
+                              });
+                            }),
                       ),
-                      Container(
-                          height: MediaQuery.of(context).size.height * 0.12,
-                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              onPressed: () {
-                                userRating();
-                                history();
-                                deleteProduct();
-                                Navigator.pop(context);
-                              },
-                              child: Text('ok'),
-                            ),
-                          )
-                      )
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(6, 6, 0, 0),
+                        child: Text(
+                          _ratingValue != null
+                              ? _ratingValue.toString() + ' of 5.0'
+                              : 'No rating yet!',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                        ),
+                      ),
                     ],
-                  )
-                ]
-            ),
-          );});
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 8.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('cancel'),
+                          ),
+                        )),
+                    Container(
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 8.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            onPressed: () {
+                              userRating();
+                              history();
+                              deleteProduct();
+                              Navigator.pop(context);
+                            },
+                            child: Text('ok'),
+                          ),
+                        ))
+                  ],
+                )
+              ]),
+            );
+          });
         });
   }
+
   Future<void> history() async {
-    DateTime now = DateTime. now();
+    DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('dd-MM-yyyy');
-    String formattedDate = formatter. format(now);
+    String formattedDate = formatter.format(now);
 
     DateTime date = DateTime.now();
     String formattedTime = DateFormat.Hms().format(date);
@@ -1487,8 +1537,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
           'product': productName.text,
           'type': type,
           'amount': productPrice.text,
-          'imageSeller':dpBuyer,
-          'imageBuyer':dpSeller,
+          'imageSeller': dpBuyer,
+          'imageBuyer': dpSeller,
           'date': formattedDate,
           'time': formattedTime,
           'status': 'Success',
@@ -1507,9 +1557,8 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
     }
   }
 
-   _selectDate(BuildContext context) async {
-
-     DateTime? picked = await showDatePicker(
+  _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         initialDatePickerMode: DatePickerMode.day,
@@ -1523,7 +1572,7 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
       });
   }
 
- _selectTime(BuildContext context) async {
+  _selectTime(BuildContext context) async {
     var setTime;
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -1542,13 +1591,92 @@ class _ContractInfoWidgetState extends State<ContractInfoWidget>
         deliveryDate = '${_timeController.text} ' + '${_dateController.text}';
 
         final today = selectedDate;
-        final getHour = today.add( Duration(hours: selectedTime.hour));
-        DateTime setTime = getHour.add( Duration(minutes: selectedTime.minute));
+        final getHour = today.add(Duration(hours: selectedTime.hour));
+        DateTime setTime = getHour.add(Duration(minutes: selectedTime.minute));
         print(setTime.microsecondsSinceEpoch);
         terminateTime = setTime.toString();
         print(terminateTime);
-      }
-      );
+      });
+  }
 
+  Future<void> _downloadImage(
+    String url, {
+    AndroidDestinationType? destination,
+    bool whenError = false,
+    String? outputMimeType,
+  }) async {
+    String? fileName;
+    String? path;
+    int? size;
+    String? mimeType;
+    try {
+      String? imageId;
+
+      if (whenError) {
+        imageId = await ImageDownloader.downloadImage(url,
+                outputMimeType: outputMimeType)
+            .catchError((error) {
+          if (error is PlatformException) {
+            String? path = "";
+            if (error.code == "404") {
+              print("Not Found Error.");
+            } else if (error.code == "unsupported_file") {
+              print("UnSupported FIle Error.");
+              path = error.details["unsupported_file_path"];
+            }
+            setState(() {
+              _message = error.toString();
+              _path = path ?? '';
+            });
+          }
+
+          print(error);
+        }).timeout(Duration(seconds: 10), onTimeout: () {
+          print("timeout");
+          return;
+        });
+      } else {
+        if (destination == null) {
+          imageId = await ImageDownloader.downloadImage(
+            url,
+            outputMimeType: outputMimeType,
+          );
+        } else {
+          imageId = await ImageDownloader.downloadImage(
+            url,
+            destination: destination,
+            outputMimeType: outputMimeType,
+          );
+        }
+      }
+
+      if (imageId == null) {
+        return;
+      }
+      fileName = await ImageDownloader.findName(imageId);
+      path = await ImageDownloader.findPath(imageId);
+      size = await ImageDownloader.findByteSize(imageId);
+      mimeType = await ImageDownloader.findMimeType(imageId);
+    } on PlatformException catch (error) {
+      setState(() {
+        _message = error.message ?? '';
+      });
+      return;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      var location = Platform.isAndroid ? "Directory" : "Photo Library";
+      _message = 'Saved as "$fileName" in $location.\n';
+      _size = 'size:     $size';
+      _mimeType = 'mimeType: $mimeType';
+      _path = path ?? '';
+
+      if (!_mimeType.contains("video")) {
+        _imageFile = File(path!);
+      }
+      return;
+    });
   }
 }

@@ -290,6 +290,10 @@ class _TransactionWidgetState extends State<TransactionWidget>
             itemCount: historyList.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (c, i) {
+              var time;
+              if( historyList[i]['time'].length>5){
+               time =  historyList[i]['time'].substring(0, 5);
+              }
               return Padding(
                 padding: const EdgeInsets.only(top: 5.0, bottom: 5),
                 child: Column(children: [
@@ -312,7 +316,7 @@ class _TransactionWidgetState extends State<TransactionWidget>
                         ),
                         Expanded(
                           child: Text(
-                            historyList[i]['time'],
+                            time,
                             textAlign: TextAlign.right,
                             style: FlutterFlowTheme.of(context).title1.override(
                                   fontFamily: 'Outfit',

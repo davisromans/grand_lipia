@@ -80,13 +80,90 @@ class AuthService {
       httpErrorHandle(
         response: res,
         context: context,
-        onSuccess: () {
-          loadingValue = false;
-          _enableLoading(context, loadingValue = false);
-          showSnackBar(
-            context,
-            'Akaunti imetengenezwa kikamilifu!',
-          );
+        onSuccess: () async {
+          try {
+            _enableLoading(context, loadingValue = true);
+            var req = jsonEncode({
+              'phone': phone,
+              'password': password,
+            });
+            var url = '$uri/api/signin';
+            print(url);
+            print(req);
+            http.Response res = await http.post(
+              Uri.parse('$uri/api/signin'),
+              body: jsonEncode({
+                'phone': phone,
+                'password': password,
+              }),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+            );
+            httpErrorHandle(
+                response: res,
+                context: context,
+                onSuccess: () async {
+                  loadingValue = false;
+                  _enableLoading(context, loadingValue = false);
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  var returnData = jsonDecode(res.body);
+
+                  print(returnData);
+                  prefs.setString('phone', returnData['phone']);
+                  prefs.setString('name', returnData['name']);
+                  prefs.setString('id', returnData['_id']);
+                  prefs.setBool('logged_in', true);
+                  var ratings = returnData['ratings'];
+                  // print(rating.length['rating']);
+                  if(returnData['images'].length > 0){
+
+                    prefs.setString('dp', returnData['images'][0]);
+                  }else{
+                    prefs.setString('dp', '');
+                  }
+                  double avgRating = 0;
+                  double totalRating = 0;
+
+                  if( returnData['ratings'].length > 0){
+                    for (int i = 0; i < ratings.length; i++) {
+                      totalRating +=ratings[i]['rating'];
+                    }
+
+                    if (totalRating != 0) {
+                      avgRating = totalRating / ratings.length;
+                      prefs.setString('rating', avgRating.toString());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  NavigationScreen()));
+                    }
+                  }else{
+                    prefs.setString('rating', '5.0');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NavigationScreen()));
+                  }},
+                onFailed: (){
+                  loadingValue = false;
+                  _enableLoading(context, loadingValue = false);
+                }
+            );
+          } catch (e) {
+            loadingValue = false;
+            _enableLoading(context, loadingValue = false);
+            showSnackBar(context, e.toString());
+          }
+          // /////////////////////
+          // loadingValue = false;
+          // _enableLoading(context, loadingValue = false);
+          // showSnackBar(
+          //   context,
+          //   'Akaunti imetengenezwa kikamilifu!',
+          // );
         },
         onFailed: (){
           loadingValue = false;
@@ -139,6 +216,7 @@ class AuthService {
            prefs.setString('phone', returnData['phone']);
            prefs.setString('name', returnData['name']);
            prefs.setString('id', returnData['_id']);
+          prefs.setBool('logged_in', true);
            var ratings = returnData['ratings'];
           // print(rating.length['rating']);
            if(returnData['images'].length > 0){
